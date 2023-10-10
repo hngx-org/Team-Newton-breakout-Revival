@@ -2,7 +2,8 @@
 
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:newton_breakout_revival/data/physics/game_engine.dart';
+
+import 'game/brick_breaker_game.dart';
 
 class StartView extends StatefulWidget {
   const StartView({super.key});
@@ -20,11 +21,11 @@ class _StartViewState extends State<StartView> {
   }
 
   _leaveLoading() async {
-    await Future.delayed(const Duration(seconds: 6));
+    await Future.delayed(const Duration(seconds: 4));
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => GameWidget(game: GameEngine()),
+          builder: (context) => const BrickBreakerGameScreen(),
         ));
   }
 
@@ -36,8 +37,8 @@ class _StartViewState extends State<StartView> {
         decoration: BoxDecoration(
           image: const DecorationImage(
               image: NetworkImage(
-                  "https://o.remove.bg/downloads/a45aa06d-f363-4a36-8bd1-80f670da1d87/41530-removebg-preview.png"),
-              fit: BoxFit.cover),
+                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSft6L-xTotXiMz8SCOpszx8uedXDw6dS0vHw&usqp=CAU"),
+              fit: BoxFit.scaleDown),
           gradient: RadialGradient(
             colors: [
               Colors.green.shade500.withOpacity(0.8),
@@ -99,6 +100,66 @@ class _StartViewState extends State<StartView> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class BrickBreakerGameScreen extends StatefulWidget {
+  const BrickBreakerGameScreen({super.key});
+
+  @override
+  State<BrickBreakerGameScreen> createState() => _BrickBreakerGameScreenState();
+}
+
+class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
+  late BrickBreakerGame game;
+  bool gameStarted = false;
+  @override
+  void initState() {
+    super.initState();
+    game = BrickBreakerGame(
+      context,
+      gameStarted: gameStarted,
+    ); // Pass gameStarted to the game instance
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          GameWidget(
+            game: game,
+            backgroundBuilder: (context) {
+              return const Center(
+                child: Opacity(
+                  opacity: 0.3,
+                  child: FlutterLogo(
+                    size: 350,
+                  ),
+                ),
+              );
+            },
+          ),
+          if (!gameStarted)
+            {
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Handle button tap to start the game.
+                    game.startGame(); // Call the startGame method in BrickBreakerGame
+                    setState(() {
+                      gameStarted = true; // Update the game state
+                    });
+                  },
+                  child: const Text(
+                    "Start Game",
+                  ),
+                ),
+              )
+            }.first,
+        ],
       ),
     );
   }

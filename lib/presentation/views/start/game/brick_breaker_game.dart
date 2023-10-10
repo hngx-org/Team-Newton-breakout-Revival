@@ -31,7 +31,7 @@ class BrickBreakerGame extends FlameGame with PanDetector {
         player: player,
         onGameOver: () {
           // This function triggers. I just don't know whta to do with it... yet
-          gameOver = true; // Trigger game over via the callback
+          // gameOver = true; /// Trigger game over via the callback
           // Navigator.pop(context); 
         });
 

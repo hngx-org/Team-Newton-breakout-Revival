@@ -3,6 +3,7 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
+import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
 
 import '../../../data/physics/game_engine.dart';
 
@@ -14,19 +15,22 @@ class StartView extends StatefulWidget {
 }
 
 class _StartViewState extends State<StartView> {
+  double innerContainerWidth = 0.0;
   @override
   void initState() {
-    // _leaveLoading();
-    print("Move to game");
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        innerContainerWidth = 292; // Set the desired final width
+      });
+    });
     super.initState();
   }
 
   _leaveLoading() async {
-    await Future.delayed(const Duration(seconds: 4));
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const BrickBreakerGameScreen(),
+          builder: (context) => const HomeView(),
         ));
   }
 
@@ -37,8 +41,7 @@ class _StartViewState extends State<StartView> {
       body: Container(
         decoration: BoxDecoration(
           image: const DecorationImage(
-              image: AssetImage("assets/images/bg.jpg"),
-              fit: BoxFit.fitWidth),
+              image: AssetImage("assets/images/bg.png"), fit: BoxFit.fill),
           gradient: RadialGradient(
             colors: [
               Colors.green.shade500.withOpacity(0.8),
@@ -62,35 +65,80 @@ class _StartViewState extends State<StartView> {
                 const SizedBox(
                   height: 60,
                 ),
-                const Text(
-                  "Breakout\nRevival",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 50, fontFamily: 'Game', color: Colors.white),
+                Stack(
+                  children: [
+                    Text(
+                      "Breakout\nRevival",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 60,
+                          fontFamily: 'Game',
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 5
+                            ..color = Colors.yellow.shade900),
+                    ),
+                    const Text(
+                      "Breakout\nRevival",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 60,
+                          fontFamily: 'Game',
+                          color: Colors.black),
+                    ),
+                  ],
                 ),
                 const Spacer(),
                 Container(
                   height: 40,
-                  width: double.infinity,
+                  width: 300, // Set the outer container to have full width
                   decoration: BoxDecoration(
-                      border:
-                          Border.all(color: Colors.yellow.shade900, width: 4),
-                      gradient: LinearGradient(
-                          colors: [
-                            Colors.green.shade500,
-                            Colors.green.shade900,
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter),
-                      borderRadius: BorderRadius.circular(20)),
-                  child: const Center(
-                    child: Text(
-                      "Loading...",
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontFamily: 'Minecraft',
-                          color: Colors.white),
-                    ),
+                    color: Colors.black,
+                    border: Border.all(color: Colors.yellow.shade900, width: 4),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Stack(
+                    children: [
+                      Row(
+                        children: [
+                          AnimatedContainer(
+                            duration: const Duration(
+                                seconds: 10), 
+                            curve: Curves.easeOut, 
+                            width:
+                                innerContainerWidth, 
+                            height: 40,
+                            onEnd: () {
+                              _leaveLoading();
+                            },
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                  colors: [
+                                    Colors.green.shade500,
+                                    Colors.green.shade900,
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          Expanded(
+                            child: Container(
+                              color: Colors.transparent,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Center(
+                        child: Text(
+                          "Loading...",
+                          style: TextStyle(
+                              fontFamily: 'Minecraft',
+                              fontSize: 20,
+                              color: Colors.white),
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 const SizedBox(
@@ -104,4 +152,3 @@ class _StartViewState extends State<StartView> {
     );
   }
 }
-

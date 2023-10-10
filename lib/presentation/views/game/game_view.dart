@@ -10,7 +10,7 @@ class BrickBreakerGameScreen extends StatefulWidget {
 }
 
 class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
-  late GameEngine game;
+  late GameEngine? game;
   bool gameStarted = false;
   @override
   void initState() {
@@ -18,7 +18,18 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
     game = GameEngine(
       context,
       gameStarted: gameStarted,
-    ); // Pass gameStarted to the game instance
+    );
+    _startGame();
+  }
+
+  _startGame() async {
+    await Future.delayed(const Duration(seconds: 1));
+    game!.startGame();
+  }
+  @override
+  void dispose() {
+    game = null;
+    super.dispose();
   }
 
   @override
@@ -27,7 +38,7 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
       body: Stack(
         children: [
           GameWidget(
-            game: game,
+            game: game!,
             backgroundBuilder: (context) {
               return const Center(
                 child: Opacity(
@@ -39,20 +50,20 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
               );
             },
           ),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                // Handle button tap to start the game.
-                game.startGame(); // Call the startGame method in BrickBreakerGame
-                setState(() {
-                  gameStarted = true; // Update the game state
-                });
-              },
-              child: const Text(
-                "Start Game",
-              ),
-            ),
-          ),
+          // Center(
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       // Handle button tap to start the game.
+          //       game.startGame(); // Call the startGame method in BrickBreakerGame
+          //       setState(() {
+          //         gameStarted = true; // Update the game state
+          //       });
+          //     },
+          //     child: const Text(
+          //       "Start Game",
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

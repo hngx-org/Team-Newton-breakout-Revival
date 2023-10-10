@@ -3,6 +3,9 @@ import 'package:flame/components.dart';
 import '../../../../data/physics/game_engine.dart';
 
 class PlayerComponent extends SpriteComponent with HasGameRef<GameEngine> {
+  PlayerComponent(){
+   onLoad();
+  }
   @override
   Future<void> onLoad() async {
     await super.onLoad();

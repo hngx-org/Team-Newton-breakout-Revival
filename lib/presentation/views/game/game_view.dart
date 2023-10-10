@@ -10,7 +10,7 @@ class BrickBreakerGameScreen extends StatefulWidget {
 }
 
 class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
-  late GameEngine? game;
+  late GameEngine game;
   bool gameStarted = false;
   @override
   void initState() {
@@ -24,11 +24,12 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
 
   _startGame() async {
     await Future.delayed(const Duration(seconds: 1));
-    game!.startGame();
+    game.startGame();
   }
+
   @override
   void dispose() {
-    game = null;
+    game.onDispose();
     super.dispose();
   }
 
@@ -38,7 +39,7 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
       body: Stack(
         children: [
           GameWidget(
-            game: game!,
+            game: game,
             backgroundBuilder: (context) {
               return const Center(
                 child: Opacity(

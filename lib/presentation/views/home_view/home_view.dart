@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
 
@@ -81,9 +84,18 @@ class _HomeViewState extends State<HomeView> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Image.asset(
-                                            "assets/images/music_on.png",
-                                            height: 60,
+                                          InkWell(
+                                            onTap: () async {
+                                              log('play');
+                                              final audioPlayer = AudioPlayer();
+                                              await audioPlayer.play(
+                                                  AssetSource(
+                                                      'sounds/wall-hit.wav'));
+                                            },
+                                            child: Image.asset(
+                                              "assets/images/music_on.png",
+                                              height: 60,
+                                            ),
                                           ),
                                         ],
                                       )

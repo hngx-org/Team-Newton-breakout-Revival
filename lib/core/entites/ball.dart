@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -8,17 +9,20 @@ import 'player.dart';
 
 class BallComponent extends SpriteComponent
     with HasGameRef<GameEngine>, CollisionCallbacks {
+  
   final PlayerComponent player;
   final VoidCallback onGameOver;
 
-  BallComponent({required this.player, required this.onGameOver});
+  BallComponent({required this.player, required this.onGameOver}){
+       player.onLoad();
+  }
   Vector2 velocity = Vector2.zero();
+  final audioPlayer = AudioPlayer();
 
   bool gameIsRunning = true;
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
     sprite = await gameRef.loadSprite('default-ball.png');
 
     position =
@@ -53,9 +57,8 @@ class BallComponent extends SpriteComponent
     }
   }
 
-
   @override
-  void update(double dt) {
+  void update(double dt) async {
     // ... (other update logic)
     // print(position);
 
@@ -69,17 +72,22 @@ class BallComponent extends SpriteComponent
                       WidgetsBinding.instance.renderView.flutterView)
                   .size
                   .width) {
+       
         // Reverse the X velocity to bounce off the sides.
         velocity.x = -velocity.x;
+         await audioPlayer.play(AssetSource('sounds/wall-hit.wav'));
       }
 
       if (position.y <= 0) {
         // Reverse the Y velocity to bounce off the top.
+        
         velocity.y = -velocity.y;
+         await audioPlayer.play(AssetSource('sounds/wall-hit.wav'));
       }
 
       // Check for collisions with the player (paddle).
       if (player.toRect().overlaps(toRect())) {
+         
         // Reverse the Y velocity to bounce off the paddle.
         velocity.y = -velocity.y;
 
@@ -88,6 +96,7 @@ class BallComponent extends SpriteComponent
         double relativePosition = position.x - player.position.x;
         // Scale the X velocity based on the relative position.
         velocity.x = relativePosition * 5;
+          await audioPlayer.play(AssetSource('sounds/paddle-hit.wav'));
       }
 
       if (position.y >=

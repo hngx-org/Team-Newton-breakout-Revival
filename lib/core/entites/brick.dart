@@ -5,22 +5,24 @@ import 'package:flame/components.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
-class BrickComponent extends PositionComponent
+class BrickComponent extends SpriteComponent
     with CollisionCallbacks, HasGameRef<GameEngine> {
+  BrickComponent(
+      {required this.pos, required this.h, required this.w, super.key});
+
+  final Vector2 pos;
+  final double h;
+  final double w;
   @override
   FutureOr<void> onLoad() async {
     super.onLoad();
-    debugMode = true;
-    width = 100;
-    height = 100;
-
-    position = Vector2(gameRef.size.x / 2, 100);
+    width = w;
+    height = h;
+    sprite = await gameRef.loadSprite("green_brick.png");
+    // position = Vector2(gameRef.size.x / 2, 100);
+    position = pos;
     anchor = Anchor.center;
-    add(RectangleHitbox(
-      isSolid: true,
-        size: Vector2(100, 100),
-        position: Vector2(gameRef.size.x / 2, 100),
-        anchor: Anchor.center));
+    add(RectangleHitbox());
   }
 
   @override
@@ -29,9 +31,8 @@ class BrickComponent extends PositionComponent
     if (other is ScreenHitbox) {
       //...
     } else if (other is BallComponent) {
-      //...
+      // print(intersectionPoints.first);
     }
-    print("O TI SEEE");
   }
 
   @override
@@ -42,7 +43,5 @@ class BrickComponent extends PositionComponent
     } else if (other is BallComponent) {
       //...
     }
-
-    print("O TI SEEE");
   }
 }

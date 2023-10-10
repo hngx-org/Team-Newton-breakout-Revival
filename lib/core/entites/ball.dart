@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:newton_breakout_revival/core/entites/brick.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 import 'player.dart';
@@ -26,13 +29,18 @@ class BallComponent extends SpriteComponent
     width = 30;
     height = 30;
     anchor = Anchor.center;
+    final hitBox = CircleHitbox(
+      radius: 18,
+    );
+
+    addAll([
+      hitBox,
+    ]);
   }
 
   void launch() {
+    velocity = Vector2(10, -400);
     gameIsRunning = true;
-    // Set the initial velocity to move the ball upward.
-    velocity = Vector2(20,
-        -300); // Example: Move the ball upward at a speed of 1 pixel per frame.
   }
 
   void resetBall() {
@@ -43,6 +51,7 @@ class BallComponent extends SpriteComponent
     width = 30;
     height = 30;
     anchor = Anchor.center;
+    launch();
   }
 
   double _computeBallStartPositionX(NotifyingVector2 position) {
@@ -53,53 +62,48 @@ class BallComponent extends SpriteComponent
     }
   }
 
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+
+    if (other is BrickComponent) {
+      velocity.negate();
+      other.removeFromParent();
+    } else if (other is PlayerComponent) {
+      velocity.y = -velocity.y;
+      double relativePosition = position.x - player.position.x;
+      velocity.x = relativePosition * 5;
+
+    } else if (other is ScreenHitbox) {
+      final collisionPoint = intersectionPoints.first;
+
+      // Left Side Collision
+      if (collisionPoint.x == 0) {
+        velocity.x = -velocity.x;
+        velocity.y = velocity.y;
+      }
+      // Right Side Collision
+      if (collisionPoint.x == game.size.x) {
+        velocity.x = -velocity.x;
+        velocity.y = velocity.y;
+      }
+      // Top Side Collision
+      if (collisionPoint.y == 0) {
+        velocity.x = velocity.x;
+        velocity.y = -velocity.y;
+      }
+      // Bottom Side Collision
+      if (collisionPoint.y == game.size.y) {
+        resetBall();
+        onGameOver(); 
+      }
+    }
+  }
 
   @override
   void update(double dt) {
-    // ... (other update logic)
-    // print(position);
-
-    // Apply the velocity to move the ball.
-    if (gameIsRunning) {
-      position += velocity * dt;
-      // Check for collisions with the screen boundaries.
-      if (position.x <= 0 ||
-          position.x >=
-              MediaQueryData.fromView(
-                      WidgetsBinding.instance.renderView.flutterView)
-                  .size
-                  .width) {
-        // Reverse the X velocity to bounce off the sides.
-        velocity.x = -velocity.x;
-      }
-
-      if (position.y <= 0) {
-        // Reverse the Y velocity to bounce off the top.
-        velocity.y = -velocity.y;
-      }
-
-      // Check for collisions with the player (paddle).
-      if (player.toRect().overlaps(toRect())) {
-        // Reverse the Y velocity to bounce off the paddle.
-        velocity.y = -velocity.y;
-
-        // Optionally, adjust the ball's horizontal velocity based on its position relative to the paddle's center.
-        // Calculate the position difference between the ball and the center of the paddle.
-        double relativePosition = position.x - player.position.x;
-        // Scale the X velocity based on the relative position.
-        velocity.x = relativePosition * 5;
-      }
-
-      if (position.y >=
-          MediaQueryData.fromView(
-                  WidgetsBinding.instance.renderView.flutterView)
-              .size
-              .height) {
-        resetBall();
-        onGameOver(); // Set the game over state to true
-      }
-    } else {
-      // print(velocity*dt);
-    }
+    position += velocity * dt;
+    
   }
 }

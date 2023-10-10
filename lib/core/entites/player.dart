@@ -1,8 +1,10 @@
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
 import '../../../../data/physics/game_engine.dart';
 
-class PlayerComponent extends SpriteComponent with HasGameRef<GameEngine> {
+class PlayerComponent extends SpriteComponent
+    with HasGameRef<GameEngine>, CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -13,6 +15,8 @@ class PlayerComponent extends SpriteComponent with HasGameRef<GameEngine> {
     width = 100;
     height = 10;
     anchor = Anchor.center;
+
+    add(RectangleHitbox());
   }
 
   void move(Vector2 delta) {

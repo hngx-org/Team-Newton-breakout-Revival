@@ -1,13 +1,15 @@
 import 'dart:async';
 
+import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
 import 'package:newton_breakout_revival/core/entites/brick.dart';
 import 'package:newton_breakout_revival/core/entites/player.dart';
+import 'package:newton_breakout_revival/data/physics/brick_creator.dart';
 
-class GameEngine extends FlameGame with PanDetector , HasCollisionDetection{
+class GameEngine extends FlameGame with PanDetector, HasCollisionDetection {
   final BuildContext context;
   final GlobalKey key = GlobalKey();
   double viewportWidth = 0.0;
@@ -24,40 +26,34 @@ class GameEngine extends FlameGame with PanDetector , HasCollisionDetection{
   late PlayerComponent player;
   late BallComponent ball;
   late BrickComponent brick;
+  late BrickCreator brickC;
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
 
-    debugMode = true;
     player = PlayerComponent();
-    brick = BrickComponent();
+    brickC = BrickCreator(this);
     ball = BallComponent(
         player: player,
         onGameOver: () {
           resetGame();
         });
-
     add(player);
+    addAll([ScreenHitbox()]);
     add(ball);
-    add(brick);
+    brickC.createBricks();
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
     final newPlayerPosition = player.position + info.delta.game;
-    // Ensure the sprite stays within the left boundary.
-
     if (newPlayerPosition.x - player.width / 2 >= 0) {
-      // Check if the right edge of the sprite is within the right boundary.
       if (newPlayerPosition.x + player.width / 2 <= viewportWidth) {
-        // Update the X position.
         player.position.x = newPlayerPosition.x;
       }
     }
     super.onPanUpdate(info);
   }
-
-  
 
   void startGame() {
     gameOver = false;
@@ -68,5 +64,15 @@ class GameEngine extends FlameGame with PanDetector , HasCollisionDetection{
   void resetGame() {
     gameOver = true;
     player.onLoad();
+  }
+
+  void dispose() {
+    removeAll([player, ball, brick]);
+  }
+
+  @override
+  void onDispose() {
+    removeAll([player, ball, brick]);
+    super.onDispose();
   }
 }

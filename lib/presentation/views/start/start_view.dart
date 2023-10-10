@@ -16,7 +16,7 @@ class StartView extends StatefulWidget {
 class _StartViewState extends State<StartView> {
   @override
   void initState() {
-    _leaveLoading();
+    // _leaveLoading();
     print("Move to game");
     super.initState();
   }
@@ -37,13 +37,12 @@ class _StartViewState extends State<StartView> {
       body: Container(
         decoration: BoxDecoration(
           image: const DecorationImage(
-              image: NetworkImage(
-                  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSft6L-xTotXiMz8SCOpszx8uedXDw6dS0vHw&usqp=CAU"),
-              fit: BoxFit.scaleDown),
+              image: AssetImage("assets/images/bg.jpg"),
+              fit: BoxFit.fitWidth),
           gradient: RadialGradient(
             colors: [
               Colors.green.shade500.withOpacity(0.8),
-              Colors.green.shade900.withOpacity(0.8),
+              Colors.green.shade900.withOpacity(1),
             ],
           ),
         ),

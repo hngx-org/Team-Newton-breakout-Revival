@@ -4,9 +4,10 @@ import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
+import 'package:newton_breakout_revival/core/entites/brick.dart';
 import 'package:newton_breakout_revival/core/entites/player.dart';
 
-class GameEngine extends FlameGame with PanDetector {
+class GameEngine extends FlameGame with PanDetector , HasCollisionDetection{
   final BuildContext context;
   final GlobalKey key = GlobalKey();
   double viewportWidth = 0.0;
@@ -22,49 +23,50 @@ class GameEngine extends FlameGame with PanDetector {
   }
   late PlayerComponent player;
   late BallComponent ball;
+  late BrickComponent brick;
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
+
+    debugMode = true;
     player = PlayerComponent();
+    brick = BrickComponent();
     ball = BallComponent(
         player: player,
         onGameOver: () {
-          // This function triggers. I just don't know whta to do with it... yet
-          // gameOver = true; /// Trigger game over via the callback
-          // Navigator.pop(context);
+          resetGame();
         });
 
     add(player);
     add(ball);
+    add(brick);
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
     final newPlayerPosition = player.position + info.delta.game;
     // Ensure the sprite stays within the left boundary.
-    if (gameStarted) {
-      if (newPlayerPosition.x - player.width / 2 >= 0) {
-        // Check if the right edge of the sprite is within the right boundary.
-        if (newPlayerPosition.x + player.width / 2 <= viewportWidth) {
-          // Update the X position.
-          player.position.x = newPlayerPosition.x;
-        }
+
+    if (newPlayerPosition.x - player.width / 2 >= 0) {
+      // Check if the right edge of the sprite is within the right boundary.
+      if (newPlayerPosition.x + player.width / 2 <= viewportWidth) {
+        // Update the X position.
+        player.position.x = newPlayerPosition.x;
       }
     }
-
     super.onPanUpdate(info);
   }
 
+  
+
   void startGame() {
-    // Move the ball upwards to start the game.
+    gameOver = false;
     gameStarted = true; // Set the game state to started
     ball.launch(); // Implement the "launch" method in your BallComponent.
   }
 
   void resetGame() {
-    gameOver = false; // Reset the game over state
-    // Implement any other game reset logic here.
+    gameOver = true;
     player.onLoad();
-    ball.onLoad();
   }
 }

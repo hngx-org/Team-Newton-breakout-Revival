@@ -39,23 +39,20 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
               );
             },
           ),
-          if (!gameStarted)
-            {
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle button tap to start the game.
-                    game.startGame(); // Call the startGame method in BrickBreakerGame
-                    setState(() {
-                      gameStarted = true; // Update the game state
-                    });
-                  },
-                  child: const Text(
-                    "Start Game",
-                  ),
-                ),
-              )
-            }.first,
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                // Handle button tap to start the game.
+                game.startGame(); // Call the startGame method in BrickBreakerGame
+                setState(() {
+                  gameStarted = true; // Update the game state
+                });
+              },
+              child: const Text(
+                "Start Game",
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -1,9 +1,8 @@
 import 'package:flame/components.dart';
 
-import '../brick_breaker_game.dart';
+import '../../../../data/physics/game_engine.dart';
 
-class PlayerComponent extends SpriteComponent
-    with HasGameRef<BrickBreakerGame> {
+class PlayerComponent extends SpriteComponent with HasGameRef<GameEngine> {
   @override
   Future<void> onLoad() async {
     await super.onLoad();

@@ -1,10 +1,10 @@
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
-import 'package:newton_breakout_revival/presentation/views/start/game/brick_breaker_game.dart';
+import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 import 'player.dart';
 
-class BallComponent extends SpriteComponent with HasGameRef<BrickBreakerGame> {
+class BallComponent extends SpriteComponent with HasGameRef<GameEngine> {
   final PlayerComponent player;
   final VoidCallback onGameOver;
 
@@ -67,8 +67,7 @@ class BallComponent extends SpriteComponent with HasGameRef<BrickBreakerGame> {
         MediaQueryData.fromView(WidgetsBinding.instance.renderView.flutterView)
             .size
             .height) {
-     
-      onGameOver();// Set the game over state to true
+      onGameOver(); // Set the game over state to true
     }
   }
 }

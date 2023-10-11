@@ -7,17 +7,19 @@ import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/entites/brick.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
-import 'player.dart';
+import 'paddle.dart';
 
 class BallComponent extends SpriteComponent
     with HasGameRef<GameEngine>, CollisionCallbacks {
-  final PlayerComponent player;
+  final PaddleComponent player;
   final VoidCallback onGameOver;
 
   BallComponent({required this.player, required this.onGameOver});
   Vector2 velocity = Vector2.zero();
-
+  bool bigBallActive = false;
   bool gameIsRunning = true;
+
+  final hitBox = CircleHitbox();
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -25,17 +27,12 @@ class BallComponent extends SpriteComponent
     sprite = await gameRef.loadSprite('default-ball.png');
 
     position =
-        Vector2(gameRef.size.x / 2, gameRef.size.y + player.position.y - 45);
-    width = 30;
-    height = 30;
+        Vector2(gameRef.size.x / 2, gameRef.size.y  -40);
+    width = 15;
+    height = 15;
     anchor = Anchor.center;
-    final hitBox = CircleHitbox(
-      radius: 18,
-    );
 
-    addAll([
-      hitBox,
-    ]);
+    add(hitBox);
   }
 
   void launch() {
@@ -43,15 +40,29 @@ class BallComponent extends SpriteComponent
     gameIsRunning = true;
   }
 
+  _reloadHitBox() {
+    remove(hitBox);
+    add(hitBox);
+  }
+
+  Future<void> increaseBall() async {
+    bigBallActive = true;
+    width = 35;
+    height = 35;
+    _reloadHitBox();
+    await Future.delayed(const Duration(seconds: 15));
+    width = 15;
+    height = 15;
+    _reloadHitBox();
+    bigBallActive = false;
+  }
+
   void resetBall() {
     gameIsRunning = false;
     final lastPosition = position;
     velocity = Vector2.zero();
-    position += Vector2(_computeBallStartPositionX(lastPosition), -45);
-    width = 30;
-    height = 30;
+    position += Vector2(_computeBallStartPositionX(lastPosition), - 40);
     anchor = Anchor.center;
-    launch();
   }
 
   double _computeBallStartPositionX(NotifyingVector2 position) {
@@ -70,21 +81,19 @@ class BallComponent extends SpriteComponent
     if (other is BrickComponent) {
       velocity.negate();
       other.removeFromParent();
-    } else if (other is PlayerComponent) {
+    } else if (other is PaddleComponent) {
       velocity.y = -velocity.y;
       double relativePosition = position.x - player.position.x;
       velocity.x = relativePosition * 5;
-
     } else if (other is ScreenHitbox) {
       final collisionPoint = intersectionPoints.first;
-
       // Left Side Collision
       if (collisionPoint.x == 0) {
         velocity.x = -velocity.x;
         velocity.y = velocity.y;
       }
       // Right Side Collision
-      if (collisionPoint.x == game.size.x) {
+      if (collisionPoint.x.toInt() == game.size.x.toInt()) {
         velocity.x = -velocity.x;
         velocity.y = velocity.y;
       }
@@ -94,9 +103,9 @@ class BallComponent extends SpriteComponent
         velocity.y = -velocity.y;
       }
       // Bottom Side Collision
-      if (collisionPoint.y == game.size.y) {
+      if (collisionPoint.y.toInt() == game.size.y.toInt()) {
         resetBall();
-        onGameOver(); 
+        onGameOver();
       }
     }
   }
@@ -104,6 +113,5 @@ class BallComponent extends SpriteComponent
   @override
   void update(double dt) {
     position += velocity * dt;
-    
   }
 }

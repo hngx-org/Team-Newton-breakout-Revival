@@ -3,8 +3,10 @@ import 'package:flame/components.dart';
 
 import '../../../../data/physics/game_engine.dart';
 
-class PlayerComponent extends SpriteComponent
+class PaddleComponent extends SpriteComponent
     with HasGameRef<GameEngine>, CollisionCallbacks {
+  Timer? sizeTimer;
+  bool powerUpActive = false;
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -12,11 +14,19 @@ class PlayerComponent extends SpriteComponent
     sprite = await gameRef.loadSprite('default-player.png');
 
     position = Vector2(gameRef.size.x / 2, gameRef.size.y - 20);
-    width = 100;
+    width = 70;
     height = 10;
     anchor = Anchor.center;
 
     add(RectangleHitbox());
+  }
+
+  Future<void> increaseSize() async {
+    powerUpActive = true;
+    width = 150;
+    await Future.delayed(const Duration(seconds: 15));
+    width = 70;
+    powerUpActive = false;
   }
 
   void move(Vector2 delta) {

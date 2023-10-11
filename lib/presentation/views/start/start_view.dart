@@ -1,11 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
-import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
 import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
 
-import '../../../data/physics/game_engine.dart';
 
 class StartView extends StatefulWidget {
   const StartView({super.key});

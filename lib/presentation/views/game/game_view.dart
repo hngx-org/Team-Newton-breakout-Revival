@@ -1,7 +1,6 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gap/gap.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 class BrickBreakerGameScreen extends StatefulWidget {
@@ -56,20 +55,6 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                       );
                     },
                   ),
-                  // Center(
-                  //   child: ElevatedButton(
-                  //     onPressed: () {
-                  //       // Handle button tap to start the game.
-                  //       game.startGame(); // Call the startGame method in BrickBreakerGame
-                  //       setState(() {
-                  //         gameStarted = true; // Update the game state
-                  //       });
-                  //     },
-                  //     child: const Text(
-                  //       "Start Game",
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),

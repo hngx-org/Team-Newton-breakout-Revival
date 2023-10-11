@@ -1,5 +1,4 @@
-import 'dart:math';
-
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -14,8 +13,12 @@ class BallComponent extends SpriteComponent
   final PaddleComponent player;
   final VoidCallback onGameOver;
 
-  BallComponent({required this.player, required this.onGameOver});
+  BallComponent({required this.player, required this.onGameOver}){
+       player.onLoad();
+  }
   Vector2 velocity = Vector2.zero();
+  final audioPlayer = AudioPlayer();
+
   bool bigBallActive = false;
   bool gameIsRunning = true;
 
@@ -23,7 +26,6 @@ class BallComponent extends SpriteComponent
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-
     sprite = await gameRef.loadSprite('default-ball.png');
 
     position =
@@ -75,13 +77,15 @@ class BallComponent extends SpriteComponent
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+      Set<Vector2> intersectionPoints, PositionComponent other)  async {
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is BrickComponent) {
+        await audioPlayer.play(AssetSource('sounds/wall-hit.wav'));
       velocity.negate();
       other.removeFromParent();
     } else if (other is PaddleComponent) {
+        await audioPlayer.play(AssetSource('sounds/paddle-hit.wav'));
       velocity.y = -velocity.y;
       double relativePosition = position.x - player.position.x;
       velocity.x = relativePosition * 5;
@@ -89,16 +93,19 @@ class BallComponent extends SpriteComponent
       final collisionPoint = intersectionPoints.first;
       // Left Side Collision
       if (collisionPoint.x == 0) {
+          await audioPlayer.play(AssetSource('sounds/wall-hit.wav'));
         velocity.x = -velocity.x;
         velocity.y = velocity.y;
       }
       // Right Side Collision
       if (collisionPoint.x.toInt() == game.size.x.toInt()) {
+          await audioPlayer.play(AssetSource('sounds/wall-hit.wav'));
         velocity.x = -velocity.x;
         velocity.y = velocity.y;
       }
       // Top Side Collision
       if (collisionPoint.y == 0) {
+          await audioPlayer.play(AssetSource('sounds/wall-hit.wav'));
         velocity.x = velocity.x;
         velocity.y = -velocity.y;
       }

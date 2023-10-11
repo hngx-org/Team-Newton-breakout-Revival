@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
@@ -20,6 +21,7 @@ class BrickComponent extends SpriteComponent
   final double h;
   final double w;
   final PowerUp? powerUp;
+
   @override
   FutureOr<void> onLoad() async {
     super.onLoad();
@@ -47,22 +49,15 @@ class BrickComponent extends SpriteComponent
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
-    if (other is ScreenHitbox) {
-      //...
-    } else if (other is BallComponent) {
-      if (powerUp != null) {
-        gameRef.applyPowerUp(powerUp ?? PowerUp(PowerUpType.EMPTY));
-      }
+    if (other is BallComponent) {
+      FlameAudio.play('wall-hit.wav');
+      gameRef.provider.score++;
+      gameRef.provider.update();
+    }
+    if (powerUp != null) {
+      gameRef.applyPowerUp(powerUp ?? PowerUp(PowerUpType.EMPTY));
     }
   }
 
-  @override
-  void onCollisionEnd(PositionComponent other) {
-    super.onCollisionEnd(other);
-    if (other is ScreenHitbox) {
-      //...
-    } else if (other is BallComponent) {
-      //...
-    }
-  }
+
 }

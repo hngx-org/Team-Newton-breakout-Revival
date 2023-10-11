@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flame/components.dart';
@@ -9,7 +11,9 @@ import 'package:newton_breakout_revival/core/entites/ball.dart';
 import 'package:newton_breakout_revival/core/entites/paddle.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
+import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/brick_creator.dart';
+import 'package:provider/provider.dart';
 
 class GameEngine extends FlameGame
     with PanDetector, DoubleTapDetector, HasCollisionDetection {
@@ -17,7 +21,7 @@ class GameEngine extends FlameGame
   final GlobalKey key = GlobalKey();
   Size viewport = const Size(0, 0);
   bool gameStarted = false;
-  bool gameOver = false;
+  bool gameOver = true;
 
   GameEngine(this.context, {required this.gameStarted}) {
     // Add a lifecycle listener to get the viewport width when the game is resized.
@@ -29,43 +33,35 @@ class GameEngine extends FlameGame
   late BallComponent ball;
   late BrickCreator brickC;
   late TextComponent textComponent;
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    //  THIS IS IN TEST MODE!!!!!
-    ///?? IT IS NOT FULLY FUNCTIONAL
-    ///  PLEASE TURN IF OFF BEFORE WORKING SO AS NOT TO CAUSE ISSUES
-
-    // drawFrame(canvas);
-
-  }
+  late GlobalProvider provider;
 
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
-
     paddle = PaddleComponent();
     brickC = BrickCreator(this);
     ball = BallComponent(
         player: paddle,
         onGameOver: () {
           resetGame();
+          provider.live--;
+          provider.update();
         });
+    provider = Provider.of<GlobalProvider>(context, listen: false);
     add(paddle);
     addAll([ScreenHitbox()]);
     add(ball);
     brickC.createBricks();
-
     setupText("Double Tap to \n     start");
+    provider.live = 3;
+    provider.update();
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
     final newPlayerPosition = paddle.position + info.delta.game;
     if (newPlayerPosition.x - paddle.width / 2 >= 0) {
-      if (newPlayerPosition.x + paddle.width / 2 <= viewport.width) {
+      if (newPlayerPosition.x + paddle.width / 2 <= size.x) {
         paddle.position.x = newPlayerPosition.x;
       }
     }
@@ -86,6 +82,7 @@ class GameEngine extends FlameGame
   }
 
   void applyPowerUp(PowerUp powerUp) {
+    provider.activatePowerUp(powerUp);
     switch (powerUp.type) {
       case PowerUpType.ENLARGE_PADDLE:
         if (paddle.powerUpActive == false) {

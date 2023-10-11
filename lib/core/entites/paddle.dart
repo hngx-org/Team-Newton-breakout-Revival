@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
@@ -22,11 +23,15 @@ class PaddleComponent extends SpriteComponent
   }
 
   Future<void> increaseSize() async {
+    final player = AudioPlayer();
+
     powerUpActive = true;
+    player.play(AssetSource('sounds/long-paddle.wav'));
     width = 150;
     await Future.delayed(const Duration(seconds: 15));
     width = 70;
     powerUpActive = false;
+    player.play(AssetSource('sounds/long-paddle.wav'));
   }
 
   void move(Vector2 delta) {

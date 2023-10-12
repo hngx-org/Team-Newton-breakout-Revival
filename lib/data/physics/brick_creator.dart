@@ -49,9 +49,9 @@ class BrickCreator {
   }
 
   void removeAllBricks() {
-  for (final brick in bricks) {
-    gameEngine.remove(brick);
+    for (final brick in bricks) {
+      gameEngine.remove(brick);
+    }
+    bricks.clear();
   }
-  bricks.clear();
-}
 }

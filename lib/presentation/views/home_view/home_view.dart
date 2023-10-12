@@ -1,6 +1,3 @@
-import 'dart:developer';
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
@@ -36,6 +33,16 @@ class _HomeViewState extends State<HomeView> {
             child: Image.asset(
               "assets/images/BreakouT.png",
               fit: BoxFit.cover,
+            ),
+          ),
+          Center(
+            child: Text(
+              'Highest Score: ${provider.score}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontFamily: 'Minecraft',
+                fontSize: 25,
+              ),
             ),
           ),
           Padding(

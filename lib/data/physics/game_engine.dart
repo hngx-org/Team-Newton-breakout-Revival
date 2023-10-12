@@ -24,7 +24,8 @@ class GameEngine extends FlameGame
   Size viewport = const Size(0, 0);
   bool gameStarted = false;
   bool gameOver = false;
-
+  bool levelUp = false;
+  int levelStatus = 1;
   GameEngine(this.context, {required this.gameStarted}) {
     // Add a lifecycle listener to get the viewport width when the game is resized.
     viewport =
@@ -66,7 +67,6 @@ class GameEngine extends FlameGame
     setupText("Double Tap to \n     start");
     provider.live = 3;
     provider.update();
-    checkLevelAchievement();
   }
 
   @override
@@ -87,6 +87,10 @@ class GameEngine extends FlameGame
     } else if (gameStarted == false) {
       remove(textComponent);
       startGame();
+    }
+    if (levelUp == true) {
+      remove(textComponent);
+      nextlevel();
     }
 
     super.onDoubleTap();
@@ -132,9 +136,18 @@ class GameEngine extends FlameGame
   void startGame() {
     gameStarted = true;
     ball.launch();
-    if (provider.isSongPlaying) {
-      provider.playGlobalMusic();
-    }
+    
+  }
+
+  void nextlevel() {
+    levelStatus++;
+    provider.stopGlobalMusic();
+    brickC.createBricks();
+    provider.live = 3;
+    provider.update();
+    levelUp = false;
+    ball.launch();
+    paddle.onLoad();
   }
 
   void startOver() {
@@ -197,9 +210,11 @@ class GameEngine extends FlameGame
     canvas.drawRect(frameRect, framePaint);
   }
 
-  void checkLevelAchievement() {
-    if (provider.live > 0 && brickC.bricks.isEmpty) {
-      setupText("Level one achieved, move to Level two");
-    }
+  void setLevel() {
+    levelUp = true;
+    ball.velocity = Vector2.zero();
+    ball.position = Vector2(size.x / 2, size.y - 45);
+    setupText("Level $levelStatus achieved \n\nDouble Tap to\n move to Level ${levelStatus++}");
+
   }
 }

@@ -107,6 +107,8 @@ Random rnd = Random();
     }
   }
 
+  List<int> allLevels = [24,48,96];
+
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
@@ -119,6 +121,12 @@ Random rnd = Random();
       gameRef.add(particle);
       gameRef.add(explosionAnimation);
       explosionAnimation.animation!.loop = false;
+
+      for (var level in allLevels) {
+        if(gameRef.provider.score == level){
+        gameRef.setLevel();
+      }
+      }
     }
     if (powerUp != null) {
       gameRef.applyPowerUp(powerUp ?? PowerUp(PowerUpType.EMPTY));

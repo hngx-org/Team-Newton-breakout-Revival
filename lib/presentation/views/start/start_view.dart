@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
+import 'package:provider/provider.dart';
 
 class StartView extends StatefulWidget {
   const StartView({super.key});
@@ -32,6 +34,8 @@ class _StartViewState extends State<StartView> {
 
   @override
   Widget build(BuildContext context) {
+
+    Provider.of<GlobalProvider>(context, listen: false).stopGlobalMusic();
     return Scaffold(
       backgroundColor: Colors.black,
       body: Container(

@@ -1,4 +1,3 @@
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
@@ -30,6 +29,14 @@ class PaddleComponent extends SpriteComponent
   Future<void> increaseSize() async {
     powerUpActive = true;
     FlameAudio.play('long-paddle.wav');
+    if (position.x >= 0 && position.x <= 82) {
+      final lastX = position.x;
+      position.x += (82 - lastX);
+    }
+    if (position.x >= gameRef.size.x - 82 && position.x <= gameRef.size.x) {
+      final lastX = position.x;
+      position.x -= (gameRef.size.x - lastX);
+    }
     width = 150;
     await Future.delayed(const Duration(seconds: 15));
     FlameAudio.play('long-paddle.wav');

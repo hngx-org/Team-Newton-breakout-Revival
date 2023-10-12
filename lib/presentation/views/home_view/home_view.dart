@@ -63,47 +63,56 @@ class _HomeViewState extends State<HomeView> {
                           builder: (context) {
                             return Dialog(
                               backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 400,
-                                height: 400,
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                    scale: 0.1,
-                                    fit: BoxFit.fill,
-                                    image: AssetImage(
-                                      "assets/images/settings_dialog.png",
+                              child:
+                                  StatefulBuilder(builder: (context, update) {
+                                return Container(
+                                  width: 400,
+                                  height: 400,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      scale: 0.1,
+                                      fit: BoxFit.fill,
+                                      image: AssetImage(
+                                        "assets/images/settings_dialog.png",
+                                      ),
                                     ),
                                   ),
-                                ),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          InkWell(
-                                            onTap: () async {
-                                              if (provider.isSongPlaying) {
-                                                provider.stopGlobalMusic();
-                                              } else {
-                                                provider.playGlobalMusic();
-                                              }
-                                            },
-                                            child: Image.asset(
-                                              provider.isSongPlaying
-                                                  ? "assets/images/song-on.png"
-                                                  : "assets/images/song-off.png",
-                                              height: 60,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                provider.isSongPlaying =
+                                                    !provider.isSongPlaying;
+
+                                                if (provider.isSongPlaying) {
+                                                  provider.playGlobalMusic();
+                                                } else {
+                                                  provider.stopGlobalMusic();
+                                                }
+
+                                                update(() {});
+                                              },
+                                              child: Image.asset(
+                                                provider.isSongPlaying
+                                                    ? "assets/images/song-on.png"
+                                                    : "assets/images/song-off.png",
+                                                height: 60,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
                             );
                           },
                         );

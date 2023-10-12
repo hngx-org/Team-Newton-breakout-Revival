@@ -30,20 +30,19 @@ class GlobalProvider extends ChangeNotifier {
   }
 
   playGlobalMusic() {
-    globalAudio.play(
-      AssetSource('sounds/global_audio.mp3'),
-    );
-    globalAudio.setReleaseMode(ReleaseMode.loop);
+    if (isSongPlaying == true) {
+  globalAudio.play(
+    AssetSource('sounds/global_audio.mp3'),
+  );
+  globalAudio.setReleaseMode(ReleaseMode.loop);
+}
 
-    isSongPlaying = true;
-    notifyListeners();
   }
 
   stopGlobalMusic() {
     globalAudio.stop();
 
-    isSongPlaying = false;
-    notifyListeners();
+    
   }
 
   activatePowerUp(PowerUp powerUp) async {

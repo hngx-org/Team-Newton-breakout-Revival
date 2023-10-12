@@ -66,6 +66,7 @@ class GameEngine extends FlameGame
     setupText("Double Tap to \n     start");
     provider.live = 3;
     provider.update();
+    checkLevelAchievement();
   }
 
   @override
@@ -131,10 +132,12 @@ class GameEngine extends FlameGame
   void startGame() {
     gameStarted = true;
     ball.launch();
+    if (provider.isSongPlaying) {
+      provider.playGlobalMusic();
+    }
   }
 
   void startOver() {
-
     provider.stopGlobalMusic();
     removeWhere((component) => component is BrickComponent);
     brickC.createBricks();
@@ -152,6 +155,9 @@ class GameEngine extends FlameGame
     gameStarted = false;
     provider.playGlobalMusic();
     setupText("GAME OVER\n\n Double tap to\n start all over");
+    if (provider.isSongPlaying) {
+      provider.playGlobalMusic();
+    }
   }
 
   void resetLive() {
@@ -189,5 +195,11 @@ class GameEngine extends FlameGame
     );
 
     canvas.drawRect(frameRect, framePaint);
+  }
+
+  void checkLevelAchievement() {
+    if (provider.live > 0 && brickC.bricks.isEmpty) {
+      setupText("Level one achieved, move to Level two");
+    }
   }
 }

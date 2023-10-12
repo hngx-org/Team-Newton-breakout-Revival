@@ -23,6 +23,8 @@ class GlobalProvider extends ChangeNotifier {
   bool shieldPowerUpActive = false;
   Duration shieldPowerUpDuration = const Duration(seconds: 0);
 
+  bool isSongPlaying = true;
+
   update() {
     notifyListeners();
   }
@@ -30,13 +32,18 @@ class GlobalProvider extends ChangeNotifier {
   playGlobalMusic() {
     globalAudio.play(
       AssetSource('sounds/global_audio.mp3'),
-      
     );
     globalAudio.setReleaseMode(ReleaseMode.loop);
+
+    isSongPlaying = true;
+    notifyListeners();
   }
 
-  stopGlobalMusic(){
+  stopGlobalMusic() {
     globalAudio.stop();
+
+    isSongPlaying = false;
+    notifyListeners();
   }
 
   activatePowerUp(PowerUp powerUp) async {

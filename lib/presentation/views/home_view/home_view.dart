@@ -2,7 +2,12 @@ import 'dart:developer';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
+import 'package:newton_breakout_revival/presentation/animation/moving_ball.dart';
+import 'package:newton_breakout_revival/presentation/animation/moving_paddle.dart';
 import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,42 +17,26 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  late GlobalProvider provider;
+  @override
+  void initState() {
+    super.initState();
+    provider = Provider.of<GlobalProvider>(context, listen: false);
+    provider.playGlobalMusic();
+  }
+
+  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green.shade900.withOpacity(0.3),
+      backgroundColor: const Color.fromARGB(31, 23, 136, 192),
       body: Stack(
         children: [
-          Center(
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 80,
-                  top: 30,
-                  child: Image.asset(
-                    "assets/images/default-ball.png",
-                    color: Colors.green,
-                    colorBlendMode: BlendMode.modulate,
-                  ),
-                ),
-                Text(
-                  "Breakout\nRevival",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 60,
-                      fontFamily: 'Game',
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 5
-                        ..color = Colors.yellow.shade900),
-                ),
-                const Text(
-                  "Breakout\nRevival",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 60, fontFamily: 'Game', color: Colors.black),
-                ),
-              ],
+          Positioned.fill(
+            child: Image.asset(
+              "assets/images/BreakouT.png",
+              fit: BoxFit.cover,
             ),
           ),
           Padding(
@@ -55,6 +44,9 @@ class _HomeViewState extends State<HomeView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                const MovingBall(),
+                const MovingPaddle(),
+                const Gap(20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -114,6 +106,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     InkWell(
                       onTap: () {
+                        provider.stopGlobalMusic();
                         Navigator.push(
                             context,
                             MaterialPageRoute(

@@ -41,6 +41,8 @@ class BrickComponent extends SpriteComponent
 
       case PowerUpType.BIG_BALL:
         return "blue_brick.png";
+      case PowerUpType.SHIELD:
+        return "red_brick.png";
       default:
         return "green_brick.png";
     }
@@ -50,6 +52,7 @@ class BrickComponent extends SpriteComponent
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is BallComponent) {
+      other.velocity.negate();
       FlameAudio.play('wall-hit.wav');
       gameRef.provider.score++;
       gameRef.provider.update();

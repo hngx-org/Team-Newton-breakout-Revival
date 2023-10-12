@@ -8,24 +8,21 @@ environment:
   sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
+  audioplayers: ^5.2.0
+  cupertino_icons: ^1.0.2
+  flame: ^1.9.1
   flutter:
     sdk: flutter
-
-
-  # UI
-  google_fonts:
   gap: ^3.0.1
-
-  # ENGINE
-  flame: ^1.9.1
-
-  cupertino_icons: ^1.0.2
+  google_fonts: null
+  flame_audio: ^2.1.1
+  provider:
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
 
   flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
 
 flutter:
 
@@ -36,6 +33,9 @@ flutter:
 
   assets:
     - assets/
+    - assets/images/
+    - assets/sounds/
+    - assets/audio/
 
   fonts:
     - family: Game
@@ -44,4 +44,3 @@ flutter:
     - family: Minecraft
       fonts:
         - asset: fonts/Minecraft-Regular1.otf
-  #

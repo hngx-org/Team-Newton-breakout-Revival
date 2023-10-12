@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
+import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
 import 'package:newton_breakout_revival/presentation/views/start/start_view.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const NewtonBreakoutRevival());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => GlobalProvider()),
+    ],
+    child: const NewtonBreakoutRevival(),
+  ));
 }
 
 class NewtonBreakoutRevival extends StatelessWidget {
   const NewtonBreakoutRevival({super.key});
 
-  // This widget is the root of your application.
+  // This widget is the root of your application
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

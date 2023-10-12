@@ -18,14 +18,13 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   late GlobalProvider provider;
+
   @override
   void initState() {
     super.initState();
     provider = Provider.of<GlobalProvider>(context, listen: false);
     provider.playGlobalMusic();
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -61,13 +60,14 @@ class _HomeViewState extends State<HomeView> {
                                 width: 400,
                                 height: 400,
                                 decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                  scale: 0.1,
-                                  fit: BoxFit.fill,
-                                  image: AssetImage(
-                                    "assets/images/settings_dialog.png",
+                                  image: DecorationImage(
+                                    scale: 0.1,
+                                    fit: BoxFit.fill,
+                                    image: AssetImage(
+                                      "assets/images/settings_dialog.png",
+                                    ),
                                   ),
-                                )),
+                                ),
                                 child: Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -78,14 +78,16 @@ class _HomeViewState extends State<HomeView> {
                                         children: [
                                           InkWell(
                                             onTap: () async {
-                                              log('play');
-                                              final audioPlayer = AudioPlayer();
-                                              await audioPlayer.play(
-                                                  AssetSource(
-                                                      'sounds/wall-hit.wav'));
+                                              if (provider.isSongPlaying) {
+                                                provider.stopGlobalMusic();
+                                              } else {
+                                                provider.playGlobalMusic();
+                                              }
                                             },
                                             child: Image.asset(
-                                              "assets/images/music_on.png",
+                                              provider.isSongPlaying
+                                                  ? "assets/images/song-on.png"
+                                                  : "assets/images/song-off.png",
                                               height: 60,
                                             ),
                                           ),
@@ -100,7 +102,7 @@ class _HomeViewState extends State<HomeView> {
                         );
                       },
                       child: Image.asset(
-                        "assets/images/settings.png",
+                        "assets/images/settings-blue.png",
                         height: 90,
                       ),
                     ),
@@ -115,14 +117,14 @@ class _HomeViewState extends State<HomeView> {
                             ));
                       },
                       child: Image.asset(
-                        "assets/images/play.png",
+                        "assets/images/play-blue-2.png",
                         height: 120,
                       ),
                     ),
-                    Image.asset(
-                      "assets/images/buy.png",
-                      height: 90,
-                    ),
+                    // Image.asset(
+                    //   "assets/images/buy.png",
+                    //   height: 90,
+                    // ),
                   ],
                 ),
               ],

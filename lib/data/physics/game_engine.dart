@@ -8,8 +8,10 @@ import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
+import 'package:newton_breakout_revival/core/entites/brick.dart';
 import 'package:newton_breakout_revival/core/entites/paddle.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
+import 'package:newton_breakout_revival/core/entites/shield.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/brick_creator.dart';
@@ -21,7 +23,7 @@ class GameEngine extends FlameGame
   final GlobalKey key = GlobalKey();
   Size viewport = const Size(0, 0);
   bool gameStarted = false;
-  bool gameOver = true;
+  bool gameOver = false;
 
   GameEngine(this.context, {required this.gameStarted}) {
     // Add a lifecycle listener to get the viewport width when the game is resized.
@@ -34,23 +36,32 @@ class GameEngine extends FlameGame
   late BrickCreator brickC;
   late TextComponent textComponent;
   late GlobalProvider provider;
+  late Shield shield;
 
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
     paddle = PaddleComponent();
     brickC = BrickCreator(this);
+
+    shield = Shield();
     ball = BallComponent(
         player: paddle,
         onGameOver: () {
-          resetGame();
           provider.live--;
+
+          if (provider.live > 0) {
+            resetLive();
+          } else {
+            endGame();
+          }
           provider.update();
         });
     provider = Provider.of<GlobalProvider>(context, listen: false);
     add(paddle);
     addAll([ScreenHitbox()]);
     add(ball);
+
     brickC.createBricks();
     setupText("Double Tap to \n     start");
     provider.live = 3;
@@ -71,17 +82,16 @@ class GameEngine extends FlameGame
   @override
   void onDoubleTap() {
     if (gameOver == true) {
+      startOver();
+    } else if (gameStarted == false) {
       remove(textComponent);
       startGame();
     }
-    if (gameStarted == false && gameOver == false) {
-      remove(textComponent);
-      startGame();
-    }
+
     super.onDoubleTap();
   }
 
-  void applyPowerUp(PowerUp powerUp) {
+  void applyPowerUp(PowerUp powerUp) async {
     provider.activatePowerUp(powerUp);
     switch (powerUp.type) {
       case PowerUpType.ENLARGE_PADDLE:
@@ -91,6 +101,14 @@ class GameEngine extends FlameGame
       case PowerUpType.BIG_BALL:
         if (ball.bigBallActive == false) {
           ball.increaseBall();
+        }
+      case PowerUpType.SHIELD:
+        if (shield.powerUpActive == false) {
+          shield.powerUpActive = true;
+          add(shield);
+          await Future.delayed(const Duration(seconds: 10));
+          shield.powerUpActive = false;
+          remove(shield);
         }
       default:
     }
@@ -111,13 +129,32 @@ class GameEngine extends FlameGame
   }
 
   void startGame() {
-    gameOver = false;
-    gameStarted = true; // Set the game state to started
-    ball.launch(); // Implement the "launch" method in your BallComponent.
+    gameStarted = true;
+    ball.launch();
   }
 
-  void resetGame() {
+  void startOver() {
+
+    provider.stopGlobalMusic();
+    removeWhere((component) => component is BrickComponent);
+    brickC.createBricks();
+    provider.live = 3;
+    provider.score = 0;
+    provider.update();
+    remove(textComponent);
+    gameOver = false;
+    startGame();
+    paddle.onLoad();
+  }
+
+  void endGame() {
     gameOver = true;
+    gameStarted = false;
+    provider.playGlobalMusic();
+    setupText("GAME OVER\n\n Double tap to\n start all over");
+  }
+
+  void resetLive() {
     gameStarted = false;
     setupText("Double Tap screen\n    to continue");
     paddle.onLoad();

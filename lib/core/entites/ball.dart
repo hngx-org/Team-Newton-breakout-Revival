@@ -1,4 +1,4 @@
-import 'package:audioplayers/audioplayers.dart';
+
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -81,7 +81,7 @@ class BallComponent extends SpriteComponent
     super.onCollisionStart(intersectionPoints, other);
 
     if (other is BrickComponent) {
-      velocity.negate();
+      // velocity.negate();
       other.removeFromParent();
     } else if (other is PaddleComponent) {
      

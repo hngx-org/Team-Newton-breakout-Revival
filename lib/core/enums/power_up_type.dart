@@ -4,5 +4,6 @@ enum PowerUpType {
   ENLARGE_PADDLE,
   FIREBALL,
   BIG_BALL,
+  SHIELD,
   EMPTY
 }

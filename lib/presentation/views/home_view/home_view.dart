@@ -1,8 +1,10 @@
-import 'dart:developer';
-
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
+import 'package:newton_breakout_revival/presentation/animation/moving_ball.dart';
+import 'package:newton_breakout_revival/presentation/animation/moving_paddle.dart';
 import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,42 +14,35 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  late GlobalProvider provider;
+
+  @override
+  void initState() {
+    super.initState();
+    provider = Provider.of<GlobalProvider>(context, listen: false);
+    provider.playGlobalMusic();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green.shade900.withOpacity(0.3),
+      backgroundColor: const Color.fromARGB(31, 23, 136, 192),
       body: Stack(
         children: [
+          Positioned.fill(
+            child: Image.asset(
+              "assets/images/BreakouT.png",
+              fit: BoxFit.cover,
+            ),
+          ),
           Center(
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 80,
-                  top: 30,
-                  child: Image.asset(
-                    "assets/images/default-ball.png",
-                    color: Colors.green,
-                    colorBlendMode: BlendMode.modulate,
-                  ),
-                ),
-                Text(
-                  "Breakout\nRevival",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 60,
-                      fontFamily: 'Game',
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 5
-                        ..color = Colors.yellow.shade900),
-                ),
-                const Text(
-                  "Breakout\nRevival",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                      fontSize: 60, fontFamily: 'Game', color: Colors.black),
-                ),
-              ],
+            child: Text(
+              'Highest Score: ${provider.score}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontFamily: 'Minecraft',
+                fontSize: 25,
+              ),
             ),
           ),
           Padding(
@@ -55,6 +50,9 @@ class _HomeViewState extends State<HomeView> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                const MovingBall(),
+                const MovingPaddle(),
+                const Gap(20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -65,55 +63,68 @@ class _HomeViewState extends State<HomeView> {
                           builder: (context) {
                             return Dialog(
                               backgroundColor: Colors.transparent,
-                              child: Container(
-                                width: 400,
-                                height: 400,
-                                decoration: const BoxDecoration(
+                              child:
+                                  StatefulBuilder(builder: (context, update) {
+                                return Container(
+                                  width: 400,
+                                  height: 400,
+                                  decoration: const BoxDecoration(
                                     image: DecorationImage(
-                                  scale: 0.1,
-                                  fit: BoxFit.fill,
-                                  image: AssetImage(
-                                    "assets/images/settings_dialog.png",
+                                      scale: 0.1,
+                                      fit: BoxFit.fill,
+                                      image: AssetImage(
+                                        "assets/images/settings_dialog.png",
+                                      ),
+                                    ),
                                   ),
-                                )),
-                                child: Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          InkWell(
-                                            onTap: () async {
-                                              log('play');
-                                              final audioPlayer = AudioPlayer();
-                                              await audioPlayer.play(
-                                                  AssetSource(
-                                                      'sounds/wall-hit.wav'));
-                                            },
-                                            child: Image.asset(
-                                              "assets/images/music_on.png",
-                                              height: 60,
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            InkWell(
+                                              onTap: () async {
+                                                provider.isSongPlaying =
+                                                    !provider.isSongPlaying;
+
+                                                if (provider.isSongPlaying) {
+                                                  provider.playGlobalMusic();
+                                                } else {
+                                                  provider.stopGlobalMusic();
+                                                }
+
+                                                update(() {});
+                                              },
+                                              child: Image.asset(
+                                                provider.isSongPlaying
+                                                    ? "assets/images/song-on.png"
+                                                    : "assets/images/song-off.png",
+                                                height: 60,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      )
-                                    ],
+                                          ],
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ),
+                                );
+                              }),
                             );
                           },
                         );
                       },
                       child: Image.asset(
-                        "assets/images/settings.png",
+                        "assets/images/settings-blue.png",
                         height: 90,
                       ),
                     ),
                     InkWell(
                       onTap: () {
+                        provider.stopGlobalMusic();
                         Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -122,14 +133,14 @@ class _HomeViewState extends State<HomeView> {
                             ));
                       },
                       child: Image.asset(
-                        "assets/images/play.png",
+                        "assets/images/play-blue-2.png",
                         height: 120,
                       ),
                     ),
-                    Image.asset(
-                      "assets/images/buy.png",
-                      height: 90,
-                    ),
+                    // Image.asset(
+                    //   "assets/images/buy.png",
+                    //   height: 90,
+                    // ),
                   ],
                 ),
               ],

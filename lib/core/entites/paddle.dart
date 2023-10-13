@@ -1,6 +1,7 @@
-import 'package:audioplayers/audioplayers.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame_audio/flame_audio.dart';
+import 'package:newton_breakout_revival/core/entites/ball.dart';
 
 import '../../../../data/physics/game_engine.dart';
 
@@ -8,6 +9,7 @@ class PaddleComponent extends SpriteComponent
     with HasGameRef<GameEngine>, CollisionCallbacks {
   Timer? sizeTimer;
   bool powerUpActive = false;
+  final audioPlayer = AudioPlayer();
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -19,22 +21,39 @@ class PaddleComponent extends SpriteComponent
     height = 10;
     anchor = Anchor.center;
 
-    add(RectangleHitbox());
+    add(RectangleHitbox(
+      isSolid: true,
+    ));
   }
 
   Future<void> increaseSize() async {
-    final player = AudioPlayer();
-
     powerUpActive = true;
-    player.play(AssetSource('sounds/long-paddle.wav'));
+    FlameAudio.play('long-paddle.wav');
+    if (position.x >= 0 && position.x <= 82) {
+      final lastX = position.x;
+      position.x += (82 - lastX);
+    }
+    if (position.x >= gameRef.size.x - 82 && position.x <= gameRef.size.x) {
+      final lastX = position.x;
+      position.x -= (gameRef.size.x - lastX);
+    }
     width = 150;
     await Future.delayed(const Duration(seconds: 15));
+    FlameAudio.play('long-paddle.wav');
     width = 70;
     powerUpActive = false;
-    player.play(AssetSource('sounds/long-paddle.wav'));
   }
 
   void move(Vector2 delta) {
     position.add(delta);
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    if (other is BallComponent) {
+      FlameAudio.play('paddle-hit.wav');
+    }
+    super.onCollisionStart(intersectionPoints, other);
   }
 }

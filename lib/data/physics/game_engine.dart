@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flame/components.dart';
@@ -6,10 +8,14 @@ import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/game.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
+import 'package:newton_breakout_revival/core/entites/brick.dart';
 import 'package:newton_breakout_revival/core/entites/paddle.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
+import 'package:newton_breakout_revival/core/entites/shield.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
+import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/brick_creator.dart';
+import 'package:provider/provider.dart';
 
 class GameEngine extends FlameGame
     with PanDetector, DoubleTapDetector, HasCollisionDetection {
@@ -18,7 +24,8 @@ class GameEngine extends FlameGame
   Size viewport = const Size(0, 0);
   bool gameStarted = false;
   bool gameOver = false;
-
+  bool levelUp = false;
+  int levelStatus = 1;
   GameEngine(this.context, {required this.gameStarted}) {
     // Add a lifecycle listener to get the viewport width when the game is resized.
     viewport =
@@ -29,43 +36,44 @@ class GameEngine extends FlameGame
   late BallComponent ball;
   late BrickCreator brickC;
   late TextComponent textComponent;
-
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-
-    //  THIS IS IN TEST MODE!!!!!
-    ///?? IT IS NOT FULLY FUNCTIONAL
-    ///  PLEASE TURN IF OFF BEFORE WORKING SO AS NOT TO CAUSE ISSUES
-
-    // drawFrame(canvas);
-
-  }
+  late GlobalProvider provider;
+  late Shield shield;
 
   @override
   FutureOr<void> onLoad() async {
     await super.onLoad();
-
     paddle = PaddleComponent();
     brickC = BrickCreator(this);
+
+    shield = Shield();
     ball = BallComponent(
         player: paddle,
         onGameOver: () {
-          resetGame();
+          provider.live--;
+
+          if (provider.live > 0) {
+            resetLive();
+          } else {
+            endGame();
+          }
+          provider.update();
         });
+    provider = Provider.of<GlobalProvider>(context, listen: false);
     add(paddle);
     addAll([ScreenHitbox()]);
     add(ball);
-    brickC.createBricks();
 
+    brickC.createBricks();
     setupText("Double Tap to \n     start");
+    provider.live = 3;
+    provider.update();
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
     final newPlayerPosition = paddle.position + info.delta.game;
     if (newPlayerPosition.x - paddle.width / 2 >= 0) {
-      if (newPlayerPosition.x + paddle.width / 2 <= viewport.width) {
+      if (newPlayerPosition.x + paddle.width / 2 <= size.x) {
         paddle.position.x = newPlayerPosition.x;
       }
     }
@@ -75,17 +83,21 @@ class GameEngine extends FlameGame
   @override
   void onDoubleTap() {
     if (gameOver == true) {
+      startOver();
+    } else if (gameStarted == false) {
       remove(textComponent);
       startGame();
     }
-    if (gameStarted == false && gameOver == false) {
+    if (levelUp == true) {
       remove(textComponent);
-      startGame();
+      nextlevel();
     }
+
     super.onDoubleTap();
   }
 
-  void applyPowerUp(PowerUp powerUp) {
+  void applyPowerUp(PowerUp powerUp) async {
+    provider.activatePowerUp(powerUp);
     switch (powerUp.type) {
       case PowerUpType.ENLARGE_PADDLE:
         if (paddle.powerUpActive == false) {
@@ -94,6 +106,14 @@ class GameEngine extends FlameGame
       case PowerUpType.BIG_BALL:
         if (ball.bigBallActive == false) {
           ball.increaseBall();
+        }
+      case PowerUpType.SHIELD:
+        if (shield.powerUpActive == false) {
+          shield.powerUpActive = true;
+          add(shield);
+          await Future.delayed(const Duration(seconds: 10));
+          shield.powerUpActive = false;
+          remove(shield);
         }
       default:
     }
@@ -114,13 +134,46 @@ class GameEngine extends FlameGame
   }
 
   void startGame() {
-    gameOver = false;
-    gameStarted = true; // Set the game state to started
-    ball.launch(); // Implement the "launch" method in your BallComponent.
+    gameStarted = true;
+    ball.launch();
+    
   }
 
-  void resetGame() {
+  void nextlevel() {
+    levelStatus++;
+    provider.stopGlobalMusic();
+    brickC.createBricks();
+    provider.live = 3;
+    provider.update();
+    levelUp = false;
+    ball.launch();
+    paddle.onLoad();
+  }
+
+  void startOver() {
+    provider.stopGlobalMusic();
+    removeWhere((component) => component is BrickComponent);
+    brickC.createBricks();
+    provider.live = 3;
+    provider.score = 0;
+    provider.update();
+    remove(textComponent);
+    gameOver = false;
+    startGame();
+    paddle.onLoad();
+  }
+
+  void endGame() {
     gameOver = true;
+    gameStarted = false;
+    provider.playGlobalMusic();
+    setupText("GAME OVER\n\n Double tap to\n start all over");
+    if (provider.isSongPlaying) {
+      provider.playGlobalMusic();
+    }
+  }
+
+  void resetLive() {
     gameStarted = false;
     setupText("Double Tap screen\n    to continue");
     paddle.onLoad();
@@ -155,5 +208,13 @@ class GameEngine extends FlameGame
     );
 
     canvas.drawRect(frameRect, framePaint);
+  }
+
+  void setLevel() {
+    levelUp = true;
+    ball.velocity = Vector2.zero();
+    ball.position = Vector2(size.x / 2, size.y - 45);
+    setupText("Level $levelStatus achieved \n\nDouble Tap to\n move to Level ${levelStatus++}");
+
   }
 }

@@ -206,6 +206,7 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            const Gap(10),
                             NeonBorderContainer(
                               width: 45,
                               height: 45,
@@ -221,6 +222,15 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 ),
                               ),
                             ),
+                            const Gap(10),
+                            IconButton(
+                                onPressed: () {
+                                  game.pauseGame();
+                                },
+                                icon: const Icon(
+                                  Icons.pause,
+                                  color: Colors.white,
+                                ))
                           ],
                         ),
                       ],
@@ -243,6 +253,19 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                               );
                         },
                       ),
+                      game.gamePaused
+                          ? const Center(
+                              child: Text(
+                                'Game Paused',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontFamily: 'Minecraft',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          : const SizedBox()
                     ],
                   ),
                 ),

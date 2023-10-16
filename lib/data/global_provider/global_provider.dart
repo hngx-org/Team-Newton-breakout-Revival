@@ -31,18 +31,15 @@ class GlobalProvider extends ChangeNotifier {
 
   playGlobalMusic() {
     if (isSongPlaying == true) {
-  globalAudio.play(
-    AssetSource('sounds/global_audio.mp3'),
-  );
-  globalAudio.setReleaseMode(ReleaseMode.loop);
-}
-
+      globalAudio.play(
+        AssetSource('sounds/global_audio.mp3'),
+      );
+      globalAudio.setReleaseMode(ReleaseMode.loop);
+    }
   }
 
   stopGlobalMusic() {
     globalAudio.stop();
-
-    
   }
 
   activatePowerUp(PowerUp powerUp) async {
@@ -50,7 +47,7 @@ class GlobalProvider extends ChangeNotifier {
       case PowerUpType.ENLARGE_PADDLE:
         if (paddlePowerUpActive == false) {
           paddlePowerUpActive = true;
-          paddlePowerUpWidth = 130;
+          paddlePowerUpWidth = 100;
           await Future.delayed(const Duration(milliseconds: 10));
           paddlePowerUpDuration = const Duration(seconds: 15);
           notifyListeners();
@@ -60,7 +57,7 @@ class GlobalProvider extends ChangeNotifier {
       case PowerUpType.BIG_BALL:
         if (bigBallPowerUpActive == false) {
           bigBallPowerUpActive = true;
-          bigBallPowerUpWidth = 130;
+          bigBallPowerUpWidth = 100;
           await Future.delayed(const Duration(milliseconds: 10));
           bigBallPowerUpDuration = const Duration(seconds: 15);
           notifyListeners();
@@ -70,7 +67,7 @@ class GlobalProvider extends ChangeNotifier {
       case PowerUpType.SHIELD:
         if (shieldPowerUpActive == false) {
           shieldPowerUpActive = true;
-          shieldPowerUpWidth = 130;
+          shieldPowerUpWidth = 100;
           await Future.delayed(const Duration(milliseconds: 10));
           shieldPowerUpDuration = const Duration(seconds: 10);
           notifyListeners();

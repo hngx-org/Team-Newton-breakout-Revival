@@ -45,7 +45,9 @@ class PaddleComponent extends SpriteComponent
   }
 
   void move(Vector2 delta) {
-    position.add(delta);
+    if (gameRef.gamePaused != true) {
+      position.add(delta);
+    }
   }
 
   @override

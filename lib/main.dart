@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:newton_breakout_revival/auth/login_screen.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
+import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
 import 'package:newton_breakout_revival/presentation/views/start/start_view.dart';
+import 'package:newton_breakout_revival/splashscreen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -26,7 +29,7 @@ class NewtonBreakoutRevival extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green.shade900),
         useMaterial3: true,
       ),
-      home: const StartView(),
+      home: const SplashScreen(),
     );
   }
 }

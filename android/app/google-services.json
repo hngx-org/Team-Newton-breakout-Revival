@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451448270932",
+    "project_id": "extreme-quasar-385619",
+    "storage_bucket": "extreme-quasar-385619.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451448270932:android:426b358aa790b0a3c67dc1",
+        "android_client_info": {
+          "package_name": "com.example.newton_breakout_revival"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBn22yWr1DoS41FGX1serNSIL7lyt6dA0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

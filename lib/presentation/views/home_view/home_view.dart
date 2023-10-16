@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:newton_breakout_revival/Leadershipbord/leadership.dart';
+import 'package:newton_breakout_revival/auth/login_screen.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/presentation/animation/moving_ball.dart';
 import 'package:newton_breakout_revival/presentation/animation/moving_paddle.dart';
@@ -108,6 +110,27 @@ class _HomeViewState extends State<HomeView> {
                                               ),
                                             ),
                                           ],
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        SizedBox(
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (ctx) =>
+                                                            const LoginScreen()));
+                                              },
+                                              child: const Text('Login')),
+                                        ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        SizedBox(
+                                          child: ElevatedButton(
+                                              onPressed: () {},
+                                              child: const Text('Logout')),
                                         )
                                       ],
                                     ),
@@ -121,6 +144,19 @@ class _HomeViewState extends State<HomeView> {
                       child: Image.asset(
                         "assets/images/settings-blue.png",
                         height: 90,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LeaderboardDialog(),
+                            ));
+                      },
+                      child: Image.asset(
+                        "assets/images/leadership.png",
+                        height: 110,
                       ),
                     ),
                     InkWell(

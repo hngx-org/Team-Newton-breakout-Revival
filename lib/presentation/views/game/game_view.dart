@@ -102,7 +102,8 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 ),
                                 const Gap(10),
                                 const Text(
-                                  "Large Paddle",
+                                  "Large Pad.",
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Minecraft',
@@ -222,14 +223,17 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 ),
                               ),
                             ),
-                            const Gap(10),
-                            IconButton(
-                                onPressed: () {
+                            const Gap(5),
+                            InkWell(
+                                onTap: () {
                                   game.pauseGame();
                                 },
-                                icon: const Icon(
-                                  Icons.pause,
-                                  color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: const Icon(
+                                    Icons.pause,
+                                    color: Colors.white,
+                                  ),
                                 ))
                           ],
                         ),

@@ -72,7 +72,7 @@ class GameEngine extends FlameGame
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    final newPlayerPosition = paddle.position + info.delta.game;
+    final newPlayerPosition = paddle.position + info.delta.global;
     if (newPlayerPosition.x - paddle.width / 2 >= 0) {
       if (newPlayerPosition.x + paddle.width / 2 <= size.x) {
         paddle.position.x = newPlayerPosition.x;

@@ -23,6 +23,7 @@ class GameEngine extends FlameGame
   final GlobalKey key = GlobalKey();
   Size viewport = const Size(0, 0);
   bool gameStarted = false;
+  bool gamePaused = false;
   bool gameOver = false;
   bool levelUp = false;
   int levelStatus = 1;
@@ -136,7 +137,6 @@ class GameEngine extends FlameGame
   void startGame() {
     gameStarted = true;
     ball.launch();
-    
   }
 
   void nextlevel() {
@@ -171,6 +171,16 @@ class GameEngine extends FlameGame
     if (provider.isSongPlaying) {
       provider.playGlobalMusic();
     }
+  }
+
+  void pauseGame() {
+    gamePaused = !gamePaused;
+    if (gamePaused == true) {
+      pauseEngine();
+    } else {
+      resumeEngine();
+    }
+    provider.update();
   }
 
   void resetLive() {
@@ -214,7 +224,7 @@ class GameEngine extends FlameGame
     levelUp = true;
     ball.velocity = Vector2.zero();
     ball.position = Vector2(size.x / 2, size.y - 45);
-    setupText("Level $levelStatus achieved \n\nDouble Tap to\n move to Level ${levelStatus++}");
-
+    setupText(
+        "Level $levelStatus achieved \n\nDouble Tap to\n move to Level ${levelStatus++}");
   }
 }

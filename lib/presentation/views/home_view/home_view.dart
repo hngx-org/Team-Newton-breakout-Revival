@@ -6,6 +6,7 @@ import 'package:newton_breakout_revival/data/global_provider/global_provider.dar
 import 'package:newton_breakout_revival/presentation/animation/moving_ball.dart';
 import 'package:newton_breakout_revival/presentation/animation/moving_paddle.dart';
 import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
+import 'package:newton_breakout_revival/presentation/views/leaderboard/leaderboard.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -173,11 +174,20 @@ class _HomeViewState extends State<HomeView> {
                         height: 120,
                       ),
                     ),
-
-                    // Image.asset(
-                    //   "assets/images/buy.png",
-                    //   height: 90,
-                    // ),
+                    InkWell(
+                      onTap: () {
+                        provider.stopGlobalMusic();
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const LeaderboardScreen(),
+                            ));
+                      },
+                      child: Image.asset(
+                        "assets/images/leaderboard.png",
+                        height: 90,
+                      ),
+                    ),
                   ],
                 ),
               ],

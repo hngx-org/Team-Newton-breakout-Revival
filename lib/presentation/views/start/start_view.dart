@@ -25,7 +25,7 @@ class _StartViewState extends State<StartView> {
   }
 
   _leaveLoading() async {
-    Navigator.push(
+    Navigator.pushReplacement(
         context,
         MaterialPageRoute(
           builder: (context) => const HomeView(),
@@ -34,7 +34,6 @@ class _StartViewState extends State<StartView> {
 
   @override
   Widget build(BuildContext context) {
-
     Provider.of<GlobalProvider>(context, listen: false).stopGlobalMusic();
     return Scaffold(
       backgroundColor: Colors.black,
@@ -112,4 +111,3 @@ class _StartViewState extends State<StartView> {
     );
   }
 }
-

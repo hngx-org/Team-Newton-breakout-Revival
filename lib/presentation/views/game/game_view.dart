@@ -102,7 +102,8 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 ),
                                 const Gap(10),
                                 const Text(
-                                  "Large Paddle",
+                                  "Large Pad.",
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Minecraft',
@@ -206,6 +207,7 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            const Gap(10),
                             NeonBorderContainer(
                               width: 45,
                               height: 45,
@@ -221,6 +223,18 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 ),
                               ),
                             ),
+                            const Gap(5),
+                            InkWell(
+                                onTap: () {
+                                  game.pauseGame();
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5),
+                                  child: const Icon(
+                                    Icons.pause,
+                                    color: Colors.white,
+                                  ),
+                                ))
                           ],
                         ),
                       ],
@@ -243,6 +257,19 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                               );
                         },
                       ),
+                      game.gamePaused
+                          ? const Center(
+                              child: Text(
+                                'Game Paused',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontFamily: 'Minecraft',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            )
+                          : const SizedBox()
                     ],
                   ),
                 ),

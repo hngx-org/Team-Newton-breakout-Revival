@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:newton_breakout_revival/auth/auth_provider.dart';
 import 'package:newton_breakout_revival/auth/login_screen.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
@@ -11,6 +12,7 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => GlobalProvider()),
+      ChangeNotifierProvider(create: (_) => AuthProvider()),
     ],
     child: const NewtonBreakoutRevival(),
   ));

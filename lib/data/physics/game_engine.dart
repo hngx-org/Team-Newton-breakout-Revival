@@ -209,6 +209,7 @@ class GameEngine extends FlameGame
     if (provider.isSongPlaying) {
       provider.playGlobalMusic();
     }
+    provider.update();
   }
 
   void pauseGame() {

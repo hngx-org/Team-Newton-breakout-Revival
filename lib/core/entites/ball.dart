@@ -1,4 +1,3 @@
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
@@ -76,15 +75,12 @@ class BallComponent extends SpriteComponent
   }
 
   @override
-  void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
-    super.onCollisionStart(intersectionPoints, other);
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
 
     if (other is BrickComponent) {
-      // velocity.negate();
       other.removeFromParent();
     } else if (other is PaddleComponent) {
-     
     } else if (other is ScreenHitbox) {
       final collisionPoint = intersectionPoints.first;
       // Left Side Collision

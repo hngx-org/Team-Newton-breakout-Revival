@@ -13,9 +13,13 @@ import 'package:newton_breakout_revival/core/entites/paddle.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
 import 'package:newton_breakout_revival/core/entites/shield.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
+import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/core/util/levels.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/brick_creator.dart';
+import 'package:newton_breakout_revival/data/services/db_key.dart';
+import 'package:newton_breakout_revival/data/services/db_service.dart';
+import 'package:newton_breakout_revival/providers/leaderboard_provider.dart';
 import 'package:provider/provider.dart';
 
 class GameEngine extends FlameGame
@@ -41,6 +45,8 @@ class GameEngine extends FlameGame
   late TextComponent textComponent;
   late GlobalProvider provider;
   late Shield shield;
+
+  final _db = locator<DBService>();
 
   @override
   FutureOr<void> onLoad() async {
@@ -191,6 +197,14 @@ class GameEngine extends FlameGame
   }
 
   void endGame() {
+    if (provider.score > int.parse(provider.highScore ?? '0')) {
+      provider.highScore = (provider.highScore ?? '0');
+      _db.save(DBKey.highScore, provider.highScore.toString());
+      context
+          .read<LeaderboardProvider>()
+          .saveScore(int.parse(provider.highScore!));
+    }
+
     gameOver = true;
     gameStarted = false;
     provider.playGlobalMusic();

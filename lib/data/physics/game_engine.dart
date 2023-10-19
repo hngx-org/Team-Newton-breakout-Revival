@@ -13,6 +13,8 @@ import 'package:newton_breakout_revival/core/entites/paddle.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
 import 'package:newton_breakout_revival/core/entites/shield.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
+import 'package:newton_breakout_revival/core/locator.dart';
+import 'package:newton_breakout_revival/core/powerups/shield_powerup.dart';
 import 'package:newton_breakout_revival/core/util/levels.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/brick_creator.dart';
@@ -41,6 +43,8 @@ class GameEngine extends FlameGame
   late TextComponent textComponent;
   late GlobalProvider provider;
   late Shield shield;
+
+  final _shieldPowerUp = locator<ShieldPowerUp>();
 
   @override
   FutureOr<void> onLoad() async {
@@ -107,24 +111,25 @@ class GameEngine extends FlameGame
   }
 
   void applyPowerUp(PowerUp powerUp) async {
-    provider.activatePowerUp(powerUp);
     switch (powerUp.type) {
       case PowerUpType.ENLARGE_PADDLE:
-        if (paddle.powerUpActive == false) {
-          paddle.increaseSize();
-        }
+        paddle.increaseSize();
+
       case PowerUpType.BIG_BALL:
-        if (ball.bigBallActive == false) {
-          ball.increaseBall();
-        }
+        ball.increaseBall();
+
       case PowerUpType.SHIELD:
-        if (shield.powerUpActive == false) {
-          shield.powerUpActive = true;
+        if (!_shieldPowerUp.isActive) {
           add(shield);
-          await Future.delayed(const Duration(seconds: 10));
-          shield.powerUpActive = false;
-          remove(shield);
         }
+        _shieldPowerUp.activate(
+          () {
+            remove(shield);
+          },
+          onChanged: () {
+            provider.update();
+          },
+        );
       default:
     }
   }

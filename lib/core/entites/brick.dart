@@ -112,7 +112,7 @@ class BrickComponent extends SpriteComponent
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is BallComponent) {
-      if (gameRef.provider.bigBallPowerUpActive) {
+      if (other.width > 15) {
         other.velocity.negate();
       }
       other.velocity.negate();

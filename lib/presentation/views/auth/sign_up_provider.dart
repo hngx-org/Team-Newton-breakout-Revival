@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/core/model/user_model.dart';
+import 'package:newton_breakout_revival/core/util/loader.dart';
 import 'package:newton_breakout_revival/data/network/api_implementation.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/login_screen.dart';
 
@@ -20,12 +21,14 @@ class SignUpProvider extends ChangeNotifier {
   bool confirmPassToggle = true;
 
   Future<void> signup(BuildContext ctx) async {
+    final loader = Loader(ctx);
     try {
+      loader.show();
       final res = await _api.signup(
           email: emailController.text,
           password: passController.text,
           name: nameController.text);
-
+      loader.close();
       UserModel data = UserModel.fromJson(json.decode(res.body));
       if (res.statusCode == 200) {
         ScaffoldMessenger.of(ctx).showSnackBar(

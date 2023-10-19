@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/data/services/db_key.dart';
 import 'package:newton_breakout_revival/data/services/db_service.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/login_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/login_screen.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/presentation/animation/moving_ball.dart';
@@ -82,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
                     height: 200,
                   ),
                   Text(
-                    'Welcome ${provider.db.get(DBKey.name)}',
+                    'Welcome ${provider.db.get(DBKey.name) ?? 'Guest'}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontFamily: 'Minecraft',
@@ -180,7 +181,11 @@ class _HomeViewState extends State<HomeView> {
                                                               builder: (ctx) =>
                                                                   const LoginScreen()));
                                                 },
-                                                child: const Text('Logout')),
+                                                child: Text(context
+                                                        .read<LoginProvider>()
+                                                        .isLoggedIn
+                                                    ? 'Logout'
+                                                    : 'Login')),
                                           )
                                         ],
                                       ),

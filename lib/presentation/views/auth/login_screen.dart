@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/login_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/signup_screen.dart';
+import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -225,9 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: () async {
                                       if (formfield!.currentState!.validate()) {
                                         try {
-                                        
                                           await provider.login(context);
-                                        
                                         } catch (error) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
@@ -256,6 +255,38 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         const LoginFooter(),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        MaterialButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                duration: Duration(seconds: 2),
+                                content: Text(
+                                  'Continued as Guest',
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const HomeView(),
+                                ));
+                          },
+                          child: const Text(
+                            'Continue as Guest',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'Minecraft',
+                              fontSize:
+                                  25, // You can adjust the font size as needed
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -284,11 +315,18 @@ class LoginFooter extends StatelessWidget {
       child: const Text.rich(
         TextSpan(
             text: 'Don\'t have an Account? ',
-            style: TextStyle(color: Colors.white, fontSize: 20),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontFamily: 'Minecraft',
+            ),
             children: [
               TextSpan(
-                text: 'SignUp',
-                style: TextStyle(color: Colors.white),
+                text: 'Sign Up',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Minecraft',
+                ),
               )
             ]),
       ),

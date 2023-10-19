@@ -195,8 +195,8 @@ class GameEngine extends FlameGame
 
   void endGame() {
     if (provider.score > int.parse(provider.highScore ?? '0')) {
-      provider.highScore = (provider.highScore ?? '0');
-      _db.save(DBKey.highScore, provider.highScore.toString());
+      provider.highScore = provider.score.toString();
+      _db.save(DBKey.highScore, provider.score.toString());
       context
           .read<LeaderboardProvider>()
           .saveScore(int.parse(provider.highScore!));

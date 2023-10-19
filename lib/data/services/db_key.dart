@@ -1,5 +1,7 @@
 class DBKey {
   DBKey._();
 
-  static const userData = "userdata";
+  static const name = "name";
+  static const id = "id";
+  static const email = "email";
 }

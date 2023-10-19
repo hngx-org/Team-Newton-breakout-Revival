@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 class Domain {
@@ -22,9 +24,10 @@ class Domain {
     final url = Uri.parse("$_baseUrl$endpoint");
     final response = await http.post(
       url,
-      body: body,
+      body: jsonEncode(body),
       headers: defaultheader,
     );
+    // print(response.body);
     return response;
   }
 }

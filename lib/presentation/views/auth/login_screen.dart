@@ -1,8 +1,9 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
-import 'package:newton_breakout_revival/presentation/views/auth/auth_provider.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/login_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/signup_screen.dart';
 import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
 import 'package:newton_breakout_revival/presentation/views/start/start_view.dart';
@@ -17,56 +18,249 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   @override
+  void dispose() {
+    super.dispose();
+    formfield = null;
+  }
+
+  GlobalKey<FormState>? formfield = GlobalKey<FormState>();
+  @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Center(
-                        child: Lottie.asset('assets/images/console2.json',
-                            width: 150),
-                      ),
-                      const Column(
-                        children: [
-                          Text(
-                            'Newton',
-                            style: TextStyle(
-                              fontSize:
-                                  25, // You can adjust the font size as needed
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            'Games',
-                            style: TextStyle(
-                              fontSize:
-                                  25, // You can adjust the font size as needed
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
+    return WillPopScope(
+      onWillPop: () async {
+        bool data = false;
+        await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text('No'),
                 ),
-                const Text(
-                  'Login',
-                  style: TextStyle(
-                    fontSize: 25, // You can adjust the font size as needed
-                    fontWeight: FontWeight.bold,
-                  ),
+                TextButton(
+                  onPressed: () {
+                    data = true;
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text('Yes'),
                 ),
-                const LoginForm(),
-                const LoginFooter(),
               ],
+              content: const Text('Are you sure you want to exit?'),
+            );
+          },
+        );
+        if (data) {
+          SystemNavigator.pop();
+        }
+
+        return false;
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: Container(
+            height: MediaQuery.of(context).size.height,
+            alignment: Alignment.center,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/leaderboard-bg.png"),
+                  fit: BoxFit.fill),
+            ),
+            child: SingleChildScrollView(
+              child: Consumer<LoginProvider>(builder: (context, provider, _) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Center(
+                                child: Lottie.asset(
+                                    'assets/images/console2.json',
+                                    width: 150),
+                              ),
+                              const Column(
+                                children: [
+                                  Text(
+                                    'Newton',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Minecraft',
+                                      fontSize:
+                                          25, // You can adjust the font size as needed
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    'Games',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily: 'Minecraft',
+                                      fontSize:
+                                          25, // You can adjust the font size as needed
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        const Text(
+                          'Login',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Minecraft',
+                            fontSize:
+                                25, // You can adjust the font size as needed
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Form(
+                          key: formfield!,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 20.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                TextFormField(
+                                  controller: provider.emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  style: const TextStyle(color: Colors.white),
+                                  decoration: const InputDecoration(
+                                    hintStyle: TextStyle(color: Colors.white),
+                                    prefixIcon: Icon(
+                                      Icons.email_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    label: Text(
+                                      'Email',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    labelStyle: TextStyle(color: Colors.white),
+                                    hintText: 'Email',
+                                    border: OutlineInputBorder(),
+                                    filled: true,
+                                    fillColor: Color.fromARGB(174, 65, 35, 29),
+                                  ),
+                                  validator: (value) {
+                                    bool emailValid = RegExp(
+                                            r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
+                                        .hasMatch(value!);
+                                    if (value.isEmpty) {
+                                      return 'Enter Email';
+                                    } else if (!emailValid) {
+                                      return 'Enter a Valid Email';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                TextFormField(
+                                  controller: provider.passController,
+                                  style: const TextStyle(color: Colors.white),
+                                  obscureText: provider.passToggle,
+                                  decoration: InputDecoration(
+                                    hintStyle:
+                                        const TextStyle(color: Colors.white),
+                                    prefixIcon: const Icon(
+                                      Icons.lock,
+                                      color: Colors.white,
+                                    ),
+                                    filled: true,
+                                    labelStyle:
+                                        const TextStyle(color: Colors.white),
+                                    fillColor:
+                                        const Color.fromARGB(174, 65, 35, 29),
+                                    label: const Text('Password'),
+                                    hintText: 'Password',
+                                    border: const OutlineInputBorder(),
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        provider.passToggle =
+                                            !provider.passToggle;
+                                        provider.notifyListeners();
+                                      },
+                                      icon: Icon(
+                                        provider.passToggle
+                                            ? Icons.visibility_off_outlined
+                                            : Icons.visibility,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Enter Password';
+                                    } else if (provider
+                                            .passController.text.length <
+                                        6) {
+                                      return 'Password Length should be more than 6 characters';
+                                    } else {
+                                      return null;
+                                    }
+                                  },
+                                ),
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 45,
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.black,
+                                        shape: const RoundedRectangleBorder()),
+                                    onPressed: () async {
+                                      if (formfield!.currentState!.validate()) {
+                                        try {
+                                          await provider.login(context);
+                                        } catch (error) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              duration:
+                                                  const Duration(seconds: 2),
+                                              content: Text(
+                                                error.toString(),
+                                                style: const TextStyle(
+                                                    fontSize: 20),
+                                              ),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
+                                      }
+                                    },
+                                    child: const Text(
+                                      'LOGIN',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                        const LoginFooter(),
+                      ],
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
         ),
@@ -90,186 +284,14 @@ class LoginFooter extends StatelessWidget {
       child: const Text.rich(
         TextSpan(
             text: 'Don\'t have an Account? ',
-            style: TextStyle(color: Colors.black, fontSize: 20),
+            style: TextStyle(color: Colors.white, fontSize: 20),
             children: [
               TextSpan(
                 text: 'SignUp',
-                style: TextStyle(color: Colors.blue),
+                style: TextStyle(color: Colors.white),
               )
             ]),
       ),
     );
   }
-}
-
-class LoginForm extends StatefulWidget {
-  const LoginForm({
-    super.key,
-  });
-
-  @override
-  State<LoginForm> createState() => _LoginFormState();
-}
-
-class _LoginFormState extends State<LoginForm> {
-  final formfield = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passController = TextEditingController();
-  // final Auth _auth = Auth();
-  bool passToggle = true;
-
-  @override
-  void dispose() {
-    super.dispose();
-    emailController.dispose();
-    passController.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: formfield,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: emailController,
-              keyboardType: TextInputType.emailAddress,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.email_outlined),
-                label: Text('Email'),
-                hintText: 'Email',
-                border: OutlineInputBorder(),
-              ),
-              validator: (value) {
-                bool emailValid =
-                    RegExp(r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$')
-                        .hasMatch(value!);
-                if (value.isEmpty) {
-                  return 'Enter Email';
-                } else if (!emailValid) {
-                  return 'Enter a Valid Email';
-                } else {
-                  return null;
-                }
-              },
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            TextFormField(
-              controller: passController,
-              obscureText: passToggle,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.fingerprint),
-                label: const Text('Password'),
-                hintText: 'Password',
-                border: const OutlineInputBorder(),
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    setState(() {
-                      passToggle = !passToggle;
-                    });
-                  },
-                  icon: Icon(passToggle
-                      ? Icons.visibility_off_outlined
-                      : Icons.visibility),
-                ),
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Enter Password';
-                } else if (passController.text.length < 6) {
-                  return 'Password Length should be more than 6 characters';
-                } else {
-                  return null;
-                }
-              },
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            SizedBox(
-              width: double.infinity,
-              height: 45,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: const RoundedRectangleBorder()),
-                onPressed: () async {
-                  final userProvider =
-                      Provider.of<AuthProvider>(context, listen: false);
-                  if (formfield.currentState!.validate()) {
-                    try {
-                      await userProvider.login(
-                          emailController.text, passController.text);
-
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => const HomeView(),
-                        ),
-                      );
-                      // ignore: duplicate_ignore
-                    } catch (error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          duration: const Duration(seconds: 2),
-                          content: Text(
-                            error.toString(),
-                            style: const TextStyle(fontSize: 20),
-                          ),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    }
-                  }
-                },
-                child: const Text(
-                  'LOGIN',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-void showErrorBottomSheet(BuildContext context, String errorMessage) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return IntrinsicWidth(
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                'Error',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Text(errorMessage),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Close'),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
 }

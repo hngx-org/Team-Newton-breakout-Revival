@@ -1,7 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
+import 'package:newton_breakout_revival/data/services/db_key.dart';
+import 'package:newton_breakout_revival/data/services/db_service.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/login_screen.dart';
 import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
 import 'package:provider/provider.dart';
 
@@ -25,11 +29,19 @@ class _StartViewState extends State<StartView> {
   }
 
   _leaveLoading() async {
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeView(),
-        ));
+    if (locator<DBService>().get(DBKey.email) != null) {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const HomeView(),
+          ));
+    } else {
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const LoginScreen(),
+          ));
+    }
   }
 
   @override

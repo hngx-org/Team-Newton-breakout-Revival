@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/locator.dart';
@@ -60,8 +61,10 @@ class LoginProvider extends ChangeNotifier {
             backgroundColor: Colors.red,
           ),
         );
+        log(data.message.toString());
       }
     } catch (e) {
+      print(e.toString());
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 2),

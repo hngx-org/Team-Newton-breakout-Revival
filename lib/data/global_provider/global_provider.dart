@@ -6,6 +6,7 @@ import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/core/powerups/big_ball.dart';
 import 'package:newton_breakout_revival/core/powerups/large_paddle.dart';
 import 'package:newton_breakout_revival/core/powerups/shield_powerup.dart';
+import 'package:newton_breakout_revival/data/services/db_key.dart';
 import 'package:newton_breakout_revival/data/services/db_service.dart';
 
 class GlobalProvider extends ChangeNotifier {
@@ -15,6 +16,13 @@ class GlobalProvider extends ChangeNotifier {
   final shield = locator<ShieldPowerUp>();
 
   int score = 0;
+
+  set highScore(String? value) {
+    db.save(DBKey.highScore, value!);
+  }
+
+  String? get highScore => db.get(DBKey.highScore);
+
   int live = 0;
   final globalAudio = AudioPlayer();
 

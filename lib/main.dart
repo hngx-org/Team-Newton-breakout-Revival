@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
+import 'package:newton_breakout_revival/providers/leaderboard_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/login_provider.dart';
 import 'package:newton_breakout_revival/core/locator.dart';
-import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/sign_up_provider.dart';
 import 'package:newton_breakout_revival/splashscreen.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +13,7 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => GlobalProvider()),
+      ChangeNotifierProvider(create: (_) => LeaderboardProvider()),
       ChangeNotifierProvider(create: (_) => LoginProvider()),
       ChangeNotifierProvider(create: (_) => SignUpProvider()),
     ],
@@ -21,6 +23,7 @@ void main() {
 
 class NewtonBreakoutRevival extends StatelessWidget {
   const NewtonBreakoutRevival({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

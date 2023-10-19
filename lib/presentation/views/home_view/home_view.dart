@@ -91,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   Text(
-                    'Highest Score: ${provider.score}',
+                    'Highest Score: ${provider.highScore}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontFamily: 'Minecraft',

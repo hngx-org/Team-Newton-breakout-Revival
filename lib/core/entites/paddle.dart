@@ -2,6 +2,8 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
+import 'package:newton_breakout_revival/core/locator.dart';
+import 'package:newton_breakout_revival/core/powerups/large_paddle.dart';
 
 import '../../../../data/physics/game_engine.dart';
 
@@ -10,6 +12,8 @@ class PaddleComponent extends SpriteComponent
   Timer? sizeTimer;
   bool powerUpActive = false;
   final audioPlayer = AudioPlayer();
+
+  final _paddlePowerUp = locator<LargePaddle>();
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -27,7 +31,6 @@ class PaddleComponent extends SpriteComponent
   }
 
   Future<void> increaseSize() async {
-    powerUpActive = true;
     FlameAudio.play('long-paddle.wav');
     if (position.x >= 0 && position.x <= 82) {
       final lastX = position.x;
@@ -37,11 +40,17 @@ class PaddleComponent extends SpriteComponent
       final lastX = position.x;
       position.x -= (gameRef.size.x - lastX);
     }
+
     width = 150;
-    await Future.delayed(const Duration(seconds: 15));
-    FlameAudio.play('long-paddle.wav');
-    width = 70;
-    powerUpActive = false;
+    _paddlePowerUp.activate(
+      () {
+        width = 70;
+        FlameAudio.play('long-paddle.wav');
+      },
+      onChanged: () {
+        gameRef.provider.update();
+      },
+    );
   }
 
   void move(Vector2 delta) {

@@ -3,6 +3,8 @@ import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/entites/brick.dart';
+import 'package:newton_breakout_revival/core/locator.dart';
+import 'package:newton_breakout_revival/core/powerups/big_ball.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 import 'paddle.dart';
@@ -18,10 +20,12 @@ class BallComponent extends SpriteComponent
   Vector2 velocity = Vector2.zero();
   final audioPlayer = AudioPlayer();
 
-  bool bigBallActive = false;
+  bool bigBallActfive = false;
   bool gameIsRunning = false;
 
   final hitBox = CircleHitbox();
+
+  final _ballPowerUp = locator<BigBall>();
   @override
   Future<void> onLoad() async {
     await super.onLoad();
@@ -46,15 +50,19 @@ class BallComponent extends SpriteComponent
   }
 
   Future<void> increaseBall() async {
-    bigBallActive = true;
     width = 35;
     height = 35;
     _reloadHitBox();
-    await Future.delayed(const Duration(seconds: 15));
-    width = 15;
-    height = 15;
-    _reloadHitBox();
-    bigBallActive = false;
+    _ballPowerUp.activate(
+      () {
+        width = 15;
+        height = 15;
+        _reloadHitBox();
+      },
+      onChanged: () {
+        gameRef.provider.update();
+      },
+    );
   }
 
   void resetBall() {

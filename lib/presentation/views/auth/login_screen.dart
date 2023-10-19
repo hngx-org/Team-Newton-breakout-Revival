@@ -5,8 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/login_provider.dart';
 import 'package:newton_breakout_revival/presentation/views/auth/signup_screen.dart';
-import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
-import 'package:newton_breakout_revival/presentation/views/start/start_view.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -227,7 +225,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                     onPressed: () async {
                                       if (formfield!.currentState!.validate()) {
                                         try {
+                                        
                                           await provider.login(context);
+                                        
                                         } catch (error) {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(

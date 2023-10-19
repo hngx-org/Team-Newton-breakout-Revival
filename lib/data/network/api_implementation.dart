@@ -1,7 +1,6 @@
 import 'package:http/http.dart';
 import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/data/network/domain.dart';
-import 'package:newton_breakout_revival/data/services/db_service.dart';
 
 class ApiImplementation {
   final _api = locator<Domain>();

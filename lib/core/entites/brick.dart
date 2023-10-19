@@ -9,9 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
-import 'package:newton_breakout_revival/core/locator.dart';
-import 'package:newton_breakout_revival/core/powerups/big_ball.dart';
-import 'package:newton_breakout_revival/core/powerups/large_paddle.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 class BrickComponent extends SpriteComponent
@@ -32,7 +29,6 @@ class BrickComponent extends SpriteComponent
   late ParticleSystemComponent particle;
 
   late SpriteAnimationComponent explosionAnimation;
-  final _ballPowerUp = locator<BigBall>();
 
   @override
   FutureOr<void> onLoad() async {
@@ -116,7 +112,7 @@ class BrickComponent extends SpriteComponent
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is BallComponent) {
-      if (_ballPowerUp.isActive) {
+      if (other.width > 15) {
         other.velocity.negate();
       }
       other.velocity.negate();

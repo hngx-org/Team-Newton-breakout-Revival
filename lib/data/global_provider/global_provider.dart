@@ -1,7 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:newton_breakout_revival/core/entites/power_up.dart';
-import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
 import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/core/powerups/big_ball.dart';
 import 'package:newton_breakout_revival/core/powerups/large_paddle.dart';

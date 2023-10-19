@@ -18,6 +18,7 @@ class LoginProvider extends ChangeNotifier {
   final emailController = TextEditingController();
   final passController = TextEditingController();
   bool passToggle = true;
+  bool isLoggedIn = false;
 
   Future<void> login(BuildContext ctx) async {
     final loader = Loader(ctx);
@@ -40,7 +41,7 @@ class LoginProvider extends ChangeNotifier {
             backgroundColor: Colors.green,
           ),
         );
-
+        isLoggedIn = true;
         _db.save(DBKey.email, data.email!);
         _db.save(DBKey.name, data.name!);
         Navigator.pushReplacement(

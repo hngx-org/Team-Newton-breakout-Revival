@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:newton_breakout_revival/auth/auth_provider.dart';
 import 'package:newton_breakout_revival/auth/signup_screen.dart';
+import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
+import 'package:newton_breakout_revival/presentation/views/start/start_view.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -193,22 +199,32 @@ class _LoginFormState extends State<LoginForm> {
                     backgroundColor: Colors.black,
                     shape: const RoundedRectangleBorder()),
                 onPressed: () async {
-                  // if (formfield.currentState!.validate()) {
-                  //   final result = await _auth.loginWithEmailAndPassword(
-                  //       emailController.text, passController.text);
-                  //   if (result) {
-                  //     // ignore: use_build_context_synchronously
-                  //     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //         builder: (_) => const MyHomePage(title: 'homepage')));
-                  //   } else {
-                  //     // ignore: use_build_context_synchronously
-                  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  //       duration: Duration(seconds: 2),
-                  //       content:
-                  //           Text("unable to sign in please try again later"),
-                  //     ));
-                  //   }
-                  // }
+                  final userProvider =
+                      Provider.of<AuthProvider>(context, listen: false);
+                  if (formfield.currentState!.validate()) {
+                    try {
+                      await userProvider.login(
+                          emailController.text, passController.text);
+
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const HomeView(),
+                        ),
+                      );
+                      // ignore: duplicate_ignore
+                    } catch (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: const Duration(seconds: 2),
+                          content: Text(
+                            error.toString(),
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: const Text(
                   'LOGIN',

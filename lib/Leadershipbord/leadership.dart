@@ -11,6 +11,22 @@ class LeaderboardDialog extends StatelessWidget {
       {'name': 'Eva', 'score': 64},
       {'name': 'Sam', 'score': 52},
       {'name': 'Linda', 'score': 48},
+      {'name': 'Bob', 'score': 72},
+      {'name': 'Eva', 'score': 64},
+      {'name': 'Sam', 'score': 52},
+      {'name': 'Linda', 'score': 48},
+      {'name': 'Bob', 'score': 72},
+      {'name': 'Eva', 'score': 64},
+      {'name': 'Sam', 'score': 52},
+      {'name': 'Linda', 'score': 48},
+      {'name': 'Bob', 'score': 72},
+      {'name': 'Eva', 'score': 64},
+      {'name': 'Sam', 'score': 52},
+      {'name': 'Linda', 'score': 48},
+      {'name': 'Bob', 'score': 72},
+      {'name': 'Eva', 'score': 64},
+      {'name': 'Sam', 'score': 52},
+      {'name': 'Linda', 'score': 48},
       // Add more entries as needed
     ];
 

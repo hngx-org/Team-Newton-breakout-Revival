@@ -151,7 +151,7 @@ class _HomeViewState extends State<HomeView> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const LeaderboardDialog(),
+                              builder: (context) => const LeaderboardScreen(),
                             ));
                       },
                       child: Image.asset(
@@ -172,20 +172,6 @@ class _HomeViewState extends State<HomeView> {
                       child: Image.asset(
                         "assets/images/play-blue-2.png",
                         height: 120,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {
-                        provider.stopGlobalMusic();
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const LeaderboardScreen(),
-                            ));
-                      },
-                      child: Image.asset(
-                        "assets/images/leaderboard.png",
-                        height: 90,
                       ),
                     ),
                   ],

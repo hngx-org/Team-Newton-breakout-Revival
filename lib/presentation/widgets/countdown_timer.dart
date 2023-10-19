@@ -9,7 +9,7 @@ class CountdownTimer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = remainingSeconds / 5;
+    final progress = remainingSeconds / 10;
 
     return LinearProgressIndicator(
       value: progress,

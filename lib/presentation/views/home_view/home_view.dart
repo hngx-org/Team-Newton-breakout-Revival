@@ -181,7 +181,7 @@ class _HomeViewState extends State<HomeView> {
                                                               builder: (ctx) =>
                                                                   const LoginScreen()));
                                                 },
-                                                child: Text(context
+                                                child: Text(!context
                                                         .read<LoginProvider>()
                                                         .isLoggedIn
                                                     ? 'Logout'

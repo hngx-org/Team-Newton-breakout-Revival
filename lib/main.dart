@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:newton_breakout_revival/auth/auth_provider.dart';
-import 'package:newton_breakout_revival/auth/login_screen.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/login_provider.dart';
+import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
-import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
-import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
-import 'package:newton_breakout_revival/presentation/views/start/start_view.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/sign_up_provider.dart';
 import 'package:newton_breakout_revival/splashscreen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  setupLocator();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => GlobalProvider()),
-      ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ChangeNotifierProvider(create: (_) => LoginProvider()),
+      ChangeNotifierProvider(create: (_) => SignUpProvider()),
     ],
     child: const NewtonBreakoutRevival(),
   ));
@@ -20,8 +21,6 @@ void main() {
 
 class NewtonBreakoutRevival extends StatelessWidget {
   const NewtonBreakoutRevival({super.key});
-
-  // This widget is the root of your application
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

@@ -19,7 +19,9 @@ dependencies:
   provider:
   lottie: ^2.6.0
   firebase_core: ^2.17.0
-  http: ^1.1.0
+  http:
+  shared_preferences: ^2.2.2
+  get_it: ^7.6.4
 
 dev_dependencies:
 

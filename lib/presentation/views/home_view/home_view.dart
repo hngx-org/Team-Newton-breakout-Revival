@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:newton_breakout_revival/Leadershipbord/leadership.dart';
-import 'package:newton_breakout_revival/auth/login_screen.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/login_screen.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/presentation/animation/moving_ball.dart';
 import 'package:newton_breakout_revival/presentation/animation/moving_paddle.dart';

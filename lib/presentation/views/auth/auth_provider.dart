@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:newton_breakout_revival/auth/user.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/user.dart';
 
 class AuthProvider extends ChangeNotifier {
   User? _user;

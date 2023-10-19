@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:newton_breakout_revival/auth/auth_provider.dart';
-import 'package:newton_breakout_revival/auth/signup_screen.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/auth_provider.dart';
+import 'package:newton_breakout_revival/presentation/views/auth/signup_screen.dart';
 import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
 import 'package:newton_breakout_revival/presentation/views/start/start_view.dart';
 import 'package:provider/provider.dart';

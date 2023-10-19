@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
+import 'package:newton_breakout_revival/presentation/widgets/countdown_timer.dart';
 import 'package:newton_breakout_revival/presentation/widgets/neon_border_container.dart';
 import 'package:provider/provider.dart';
 
@@ -79,25 +80,12 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                             const Gap(3),
                             Row(
                               children: [
-                                AnimatedContainer(
-                                  duration: provider.paddlePowerUpDuration,
-                                  curve: Curves.easeOut,
-                                  width: provider.paddlePowerUpWidth,
-                                  height: 8,
-                                  onEnd: () {
-                                    provider.paddlePowerUpDuration =
-                                        const Duration(seconds: 0);
-                                    provider.paddlePowerUpActive = false;
-                                  },
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                        colors: [
-                                          Colors.yellow.shade500,
-                                          Colors.yellow.shade900,
-                                        ],
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter),
-                                    borderRadius: BorderRadius.circular(3),
+                                SizedBox(
+                                  width: 100,
+                                  child: CountdownTimer(
+                                    remainingSeconds:
+                                        provider.largePaddle.remainingSeconds,
+                                    color: Colors.yellow,
                                   ),
                                 ),
                                 const Gap(10),
@@ -114,25 +102,12 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                             const Gap(3),
                             Row(
                               children: [
-                                AnimatedContainer(
-                                  duration: provider.bigBallPowerUpDuration,
-                                  curve: Curves.easeOut,
-                                  width: provider.bigBallPowerUpWidth,
-                                  height: 8,
-                                  onEnd: () {
-                                    provider.bigBallPowerUpDuration =
-                                        const Duration(seconds: 0);
-                                    provider.bigBallPowerUpActive = false;
-                                  },
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                        colors: [
-                                          Colors.blue.shade500,
-                                          Colors.blue.shade900,
-                                        ],
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter),
-                                    borderRadius: BorderRadius.circular(3),
+                                SizedBox(
+                                  width: 100,
+                                  child: CountdownTimer(
+                                    remainingSeconds:
+                                        provider.bigBall.remainingSeconds,
+                                    color: Colors.blue,
                                   ),
                                 ),
                                 const Gap(10),
@@ -148,25 +123,12 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                             const Gap(3),
                             Row(
                               children: [
-                                AnimatedContainer(
-                                  duration: provider.shieldPowerUpDuration,
-                                  curve: Curves.easeOut,
-                                  width: provider.shieldPowerUpWidth,
-                                  height: 8,
-                                  onEnd: () {
-                                    provider.shieldPowerUpDuration =
-                                        const Duration(seconds: 0);
-                                    provider.shieldPowerUpActive = false;
-                                  },
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                        colors: [
-                                          Colors.red.shade500,
-                                          Colors.red.shade900,
-                                        ],
-                                        begin: Alignment.topCenter,
-                                        end: Alignment.bottomCenter),
-                                    borderRadius: BorderRadius.circular(3),
+                                SizedBox(
+                                  width: 100,
+                                  child: CountdownTimer(
+                                    remainingSeconds:
+                                        provider.shield.remainingSeconds,
+                                    color: Colors.red,
                                   ),
                                 ),
                                 const Gap(10),
@@ -228,9 +190,9 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 onTap: () {
                                   game.pauseGame();
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: const Icon(
+                                child: const Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(
                                     Icons.pause,
                                     color: Colors.white,
                                   ),

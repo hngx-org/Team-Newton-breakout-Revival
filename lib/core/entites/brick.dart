@@ -9,6 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
+import 'package:newton_breakout_revival/core/locator.dart';
+import 'package:newton_breakout_revival/core/powerups/big_ball.dart';
+import 'package:newton_breakout_revival/core/powerups/large_paddle.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 class BrickComponent extends SpriteComponent
@@ -26,9 +29,10 @@ class BrickComponent extends SpriteComponent
   final PowerUp? powerUp;
 
   ////new particles
- late ParticleSystemComponent particle;
+  late ParticleSystemComponent particle;
 
   late SpriteAnimationComponent explosionAnimation;
+  final _ballPowerUp = locator<BigBall>();
 
   @override
   FutureOr<void> onLoad() async {
@@ -40,7 +44,6 @@ class BrickComponent extends SpriteComponent
     position = pos;
     anchor = Anchor.center;
     add(RectangleHitbox(isSolid: true));
-
 
     ////////////////////////////////////////////
     ///please you can select either the explotion or the particle
@@ -87,11 +90,11 @@ class BrickComponent extends SpriteComponent
       ),
     );
   }
-///according to documentation,please check and confirm
-Random rnd = Random();
+
+  ///according to documentation,please check and confirm
+  Random rnd = Random();
 
   Vector2 randomVector2() => (Vector2.random(rnd) - Vector2.random(rnd)) * 500;
-
 
   String _getSprite() {
     switch (powerUp?.type) {
@@ -107,25 +110,35 @@ Random rnd = Random();
     }
   }
 
-  List<int> allLevels = [24,48,96];
+  List<int> allLevels = [24, 48, 96];
 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);
     if (other is BallComponent) {
+      if (_ballPowerUp.isActive) {
+        other.velocity.negate();
+      }
       other.velocity.negate();
       FlameAudio.play('wall-hit.wav');
       gameRef.provider.score++;
       gameRef.provider.update();
+
       ///check this also
       gameRef.add(particle);
       gameRef.add(explosionAnimation);
       explosionAnimation.animation!.loop = false;
 
-      for (var level in allLevels) {
-        if(gameRef.provider.score == level){
-        gameRef.setLevel();
-      }
+      // for (var level in allLevels) {
+      //   if (gameRef.provider.score == level) {
+      //     gameRef.setLevel();
+      //   }
+      // }
+      if (gameRef.remainingBricks != 0) {
+        gameRef.remainingBricks--;
+        if (gameRef.remainingBricks == 0) {
+          gameRef.setLevel();
+        }
       }
     }
     if (powerUp != null) {
@@ -133,5 +146,6 @@ Random rnd = Random();
     }
   }
 
-
+  @override
+  toString() => 'BrickComponent(powerup: $powerUp)';
 }

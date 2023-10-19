@@ -13,6 +13,7 @@ import 'package:newton_breakout_revival/core/entites/paddle.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
 import 'package:newton_breakout_revival/core/entites/shield.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
+import 'package:newton_breakout_revival/core/util/levels.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/brick_creator.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class GameEngine extends FlameGame
   bool gameOver = false;
   bool levelUp = false;
   int levelStatus = 1;
+  int remainingBricks = 0;
   GameEngine(this.context, {required this.gameStarted}) {
     // Add a lifecycle listener to get the viewport width when the game is resized.
     viewport =
@@ -64,7 +66,7 @@ class GameEngine extends FlameGame
     addAll([ScreenHitbox()]);
     add(ball);
 
-    brickC.createBricks();
+    brickC.generateBricksFromPattern(context, null);
     setupText("Double Tap to \n     start");
     provider.live = 3;
     provider.update();
@@ -80,6 +82,13 @@ class GameEngine extends FlameGame
     }
     super.onPanUpdate(info);
   }
+
+  // @override
+  // void onChildrenChanged(Component child, ChildrenChangeType type) {
+  //   if (type == ChildrenChangeType.removed) {
+  //     print('$child  is removed');
+  //   }
+  // }
 
   @override
   void onDoubleTap() {
@@ -140,9 +149,27 @@ class GameEngine extends FlameGame
   }
 
   void nextlevel() {
-    levelStatus++;
     provider.stopGlobalMusic();
-    brickC.createBricks();
+    switch (levelStatus) {
+      case 1:
+        brickC.generateBricksFromPattern(context, pattern1);
+      case 2:
+        brickC.generateBricksFromPattern(context, pattern2);
+      case 3:
+        brickC.generateBricksFromPattern(context, pattern3);
+      case 4:
+        brickC.generateBricksFromPattern(context, pattern4);
+      case 5:
+        brickC.generateBricksFromPattern(context, pattern4);
+      case 6:
+        brickC.generateBricksFromPattern(context, pattern4);
+      case 7:
+        brickC.generateBricksFromPattern(context, pattern4);
+      case 8:
+        brickC.generateBricksFromPattern(context, pattern4);
+      default:
+        brickC.generateBricksFromPattern(context, null);
+    }
     provider.live = 3;
     provider.update();
     levelUp = false;
@@ -153,7 +180,7 @@ class GameEngine extends FlameGame
   void startOver() {
     provider.stopGlobalMusic();
     removeWhere((component) => component is BrickComponent);
-    brickC.createBricks();
+    brickC.generateBricksFromPattern(context, pattern1);
     provider.live = 3;
     provider.score = 0;
     provider.update();
@@ -225,6 +252,7 @@ class GameEngine extends FlameGame
     ball.velocity = Vector2.zero();
     ball.position = Vector2(size.x / 2, size.y - 45);
     setupText(
-        "Level $levelStatus achieved \n\nDouble Tap to\n move to Level ${levelStatus++}");
+        "Level $levelStatus achieved \n\nDouble Tap to\n move to Level ${levelStatus + 1}");
+    levelStatus += 1;
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:newton_breakout_revival/Leadershipbord/leadership.dart';
 import 'package:newton_breakout_revival/auth/login_screen.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/presentation/animation/moving_ball.dart';
 import 'package:newton_breakout_revival/presentation/animation/moving_paddle.dart';
 import 'package:newton_breakout_revival/presentation/views/game/game_view.dart';
 import 'package:newton_breakout_revival/presentation/views/leaderboard/leaderboard.dart';
+import 'package:newton_breakout_revival/providers/leaderboard_provider.dart';
 import 'package:provider/provider.dart';
 
 class HomeView extends StatefulWidget {
@@ -151,8 +151,8 @@ class _HomeViewState extends State<HomeView> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const LeaderboardScreen(),
-                            ));
+                                builder: (context) =>
+                                    const LeaderboardScreen()));
                       },
                       child: Image.asset(
                         "assets/images/leadership.png",

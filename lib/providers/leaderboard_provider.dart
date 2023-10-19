@@ -57,7 +57,7 @@ class LeaderboardProvider extends ChangeNotifier {
         throw 'An error occurred';
       }
     } catch (e) {
-      throw e.toString();
+      // throw e.toString();
     }
   }
 }

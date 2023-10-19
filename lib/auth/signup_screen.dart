@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:newton_breakout_revival/auth/auth_provider.dart';
 import 'package:newton_breakout_revival/auth/login_screen.dart';
+import 'package:newton_breakout_revival/presentation/views/home_view/home_view.dart';
+import 'package:newton_breakout_revival/presentation/views/start/start_view.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -98,6 +104,7 @@ class _SignUpFormState extends State<SignUpForm> {
   final emailController = TextEditingController();
   final passController = TextEditingController();
   final confirmPassController = TextEditingController();
+  final nameController = TextEditingController();
 
   // final Auth _auth = Auth();
   bool passToggle = true;
@@ -110,6 +117,7 @@ class _SignUpFormState extends State<SignUpForm> {
     passController.dispose();
     emailController.dispose();
     confirmPassController.dispose();
+    nameController.dispose();
   }
 
   @override
@@ -120,6 +128,28 @@ class _SignUpFormState extends State<SignUpForm> {
         key: formKey,
         child: Column(
           children: [
+            TextFormField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                label: Text('Name'),
+                hintText: 'Name',
+                prefixIcon: Icon(Icons.person),
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Enter Name';
+                } else if (nameController.text.length < 2 ||
+                    nameController.text.length > 10) {
+                  return 'Name Length should be between 2 to 10 characters';
+                } else {
+                  return null;
+                }
+              },
+            ),
+            const SizedBox(
+              height: 30,
+            ),
             TextFormField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
@@ -215,22 +245,32 @@ class _SignUpFormState extends State<SignUpForm> {
                     backgroundColor: Colors.black,
                     shape: const RoundedRectangleBorder()),
                 onPressed: () async {
-                  // if (formKey.currentState!.validate()) {
-                  //   final result = await _auth.createUserWithEmailAndPassword(
-                  //       emailController.text, passController.text);
-                  //   if (result) {
-                  //     // ignore: use_build_context_synchronously
-                  //     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  //         builder: (_) => const MyHomePage(title: 'homepage')));
-                  //   } else {
-                  //     // ignore: use_build_context_synchronously
-                  //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  //       duration: Duration(seconds: 2),
-                  //       content:
-                  //           Text("unable to sign up please try again later"),
-                  //     ));
-                  //   }
-                  // }
+                  final userProvider =
+                      Provider.of<AuthProvider>(context, listen: false);
+                  if (formKey.currentState!.validate()) {
+                    try {
+                      await userProvider.signup(nameController.text,
+                          emailController.text, passController.text);
+
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const HomeView(),
+                        ),
+                      );
+                      // ignore: duplicate_ignore
+                    } catch (error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          duration: const Duration(seconds: 2),
+                          content: Text(
+                            error.toString(),
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    }
+                  }
                 },
                 child: const Text(
                   'SIGNUP',

@@ -4,4 +4,5 @@ class DBKey {
   static const name = "name";
   static const id = "id";
   static const email = "email";
+  static const highScore = "highScore";
 }

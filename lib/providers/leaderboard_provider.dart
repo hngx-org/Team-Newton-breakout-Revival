@@ -2,10 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:newton_breakout_revival/core/locator.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
+import 'package:newton_breakout_revival/data/services/db_key.dart';
+import 'package:newton_breakout_revival/data/services/db_service.dart';
 
 class LeaderboardProvider extends ChangeNotifier {
   final String baseUrl = "https://newtonbreakoutrevival.onrender.com";
+  final _db = locator<DBService>();
 
   Future<List<Map<String, dynamic>>?> fetchLeaderboardData() async {
     try {
@@ -25,9 +29,7 @@ class LeaderboardProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> saveScore(String name, int score, GameEngine gameEngine) async {
-    gameEngine.gameOver;
-
+  Future<void> saveScore(int score) async {
     try {
       final response = await http.post(
         Uri.parse("$baseUrl/game/scoreboard"),
@@ -36,7 +38,7 @@ class LeaderboardProvider extends ChangeNotifier {
         },
         body: jsonEncode(
           {
-            'name': name,
+            'name': _db.get(DBKey.name),
             'score': score,
           },
         ),

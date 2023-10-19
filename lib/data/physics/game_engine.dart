@@ -159,6 +159,14 @@ class GameEngine extends FlameGame
         brickC.generateBricksFromPattern(context, pattern3);
       case 4:
         brickC.generateBricksFromPattern(context, pattern4);
+      case 5:
+        brickC.generateBricksFromPattern(context, pattern4);
+      case 6:
+        brickC.generateBricksFromPattern(context, pattern4);
+      case 7:
+        brickC.generateBricksFromPattern(context, pattern4);
+      case 8:
+        brickC.generateBricksFromPattern(context, pattern4);
       default:
         brickC.generateBricksFromPattern(context, null);
     }

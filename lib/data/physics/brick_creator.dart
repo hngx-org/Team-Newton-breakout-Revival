@@ -17,35 +17,6 @@ class BrickCreator {
   static final powerUpTypes = PowerUpType.values.toList();
   final random = Random();
   final List<BrickComponent> bricks = [];
-  // void createBricks() {
-  //   const bricksPerRow = 8; // Number of bricks in each row
-  //   const numRows = 3; // Number of rows of bricks
-
-  //   final screenWidth = gameEngine.viewport.width - 30;
-
-  //   const rowSpacing = 10; // Spacing between rows
-  //   final colSpacing =
-  //       (screenWidth - bricksPerRow * brickWidth) / (bricksPerRow + 1);
-
-  //   for (int row = 0; row < numRows; row++) {
-  //     for (int col = 0; col < bricksPerRow; col++) {
-  //       final x = col * (brickWidth + colSpacing) + colSpacing;
-  //       final y = row * (brickHeight + rowSpacing) + 50; // Adjust 50 as needed
-
-  //       final powerUpType = powerUpTypes[random.nextInt(powerUpTypes.length)];
-
-  //       final brick = BrickComponent(
-  //         w: brickWidth.toDouble(),
-  //         powerUp: PowerUp(powerUpType),
-  //         pos: Vector2(x + 30, y.toDouble()),
-  //         h: brickHeight.toDouble(),
-  //       );
-
-  //       bricks.add(brick);
-  //       gameEngine.add(brick);
-  //     }
-  //   }
-  // }
 
   void removeAllBricks() {
     for (final brick in bricks) {
@@ -60,7 +31,7 @@ class BrickCreator {
     double brickHeight = 10.0; // Height of each brick
     double rowSpacing =
         SizeConfig.fromHeight(context, 4); // Vertical spacing between rows
-    double colSpacing = -1; // Horizontal spacing between columns
+    double colSpacing = -10; // Horizontal spacing between columns
 
     List<String> lines = generatedPattern.trim().split('\n');
     int numRows = lines.length;
@@ -80,7 +51,7 @@ class BrickCreator {
             w: brickWidth,
             h: brickHeight,
             powerUp: PowerUp(powerUpType),
-            pos: Vector2(x - 50, y),
+            pos: Vector2(x + 50, y),
           );
 
           // Add the brick to your list of bricks or game engine
@@ -98,7 +69,7 @@ class BrickCreator {
             w: brickWidth,
             h: brickHeight,
             powerUp: PowerUp(PowerUpType.BIG_BALL),
-            pos: Vector2(x - 50, y),
+            pos: Vector2(x + 50, y),
           );
 
           // Add the brick to your list of bricks or game engine

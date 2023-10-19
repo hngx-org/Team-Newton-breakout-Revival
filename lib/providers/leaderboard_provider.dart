@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 class LeaderboardProvider extends ChangeNotifier {
   final String baseUrl = "https://newtonbreakoutrevival.onrender.com";
@@ -24,7 +25,9 @@ class LeaderboardProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> saveScore(String name, int score) async {
+  Future<void> saveScore(String name, int score, GameEngine gameEngine) async {
+    gameEngine.gameOver;
+
     try {
       final response = await http.post(
         Uri.parse("$baseUrl/game/scoreboard"),

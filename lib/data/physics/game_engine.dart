@@ -16,6 +16,7 @@ import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
 import 'package:newton_breakout_revival/core/util/levels.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/brick_creator.dart';
+import 'package:newton_breakout_revival/providers/leaderboard_provider.dart';
 import 'package:provider/provider.dart';
 
 class GameEngine extends FlameGame
@@ -191,6 +192,7 @@ class GameEngine extends FlameGame
   }
 
   void endGame() {
+    // context.read<LeaderboardProvider>().saveScore(name, provider.score, this);
     gameOver = true;
     gameStarted = false;
     provider.playGlobalMusic();

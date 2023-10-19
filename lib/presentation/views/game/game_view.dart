@@ -228,9 +228,9 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                 onTap: () {
                                   game.pauseGame();
                                 },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: const Icon(
+                                child: const Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: Icon(
                                     Icons.pause,
                                     color: Colors.white,
                                   ),

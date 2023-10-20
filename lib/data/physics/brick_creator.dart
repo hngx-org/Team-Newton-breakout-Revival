@@ -35,7 +35,8 @@ class BrickCreator {
     double brickHeight = 10.0; // Height of each brick
     double rowSpacing =
         SizeConfig.fromHeight(context, 3); // Vertical spacing between rows
-    double colSpacing = -10; // Horizontal spacing between columns
+    double colSpacing =
+        -SizeConfig.fromWidth(context, 2); // Horizontal spacing between columns
 
     List<String> lines = generatedPattern.trim().split('\n');
     int numRows = lines.length;

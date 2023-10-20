@@ -30,7 +30,7 @@ class BrickCreator {
     double brickWidth = 30.0; // Width of each brick
     double brickHeight = 10.0; // Height of each brick
     double rowSpacing =
-        SizeConfig.fromHeight(context, 4); // Vertical spacing between rows
+        SizeConfig.fromHeight(context, 3); // Vertical spacing between rows
     double colSpacing = -10; // Horizontal spacing between columns
 
     List<String> lines = generatedPattern.trim().split('\n');
@@ -51,7 +51,7 @@ class BrickCreator {
             w: brickWidth,
             h: brickHeight,
             powerUp: PowerUp(powerUpType),
-            pos: Vector2(x + 50, y),
+            pos: Vector2(x + 30, y),
           );
 
           // Add the brick to your list of bricks or game engine

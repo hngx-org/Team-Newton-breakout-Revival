@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:newton_breakout_revival/core/locator.dart';
+import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 import 'package:newton_breakout_revival/data/services/db_key.dart';
 import 'package:newton_breakout_revival/data/services/db_service.dart';
 
@@ -18,7 +19,7 @@ class LeaderboardProvider extends ChangeNotifier {
         final List<dynamic> leaderboardData = jsonDecode(response.body);
         final List<Map<String, dynamic>> scores =
             List<Map<String, dynamic>>.from(leaderboardData);
-        debugPrint(scores.toString());
+        print(scores);
         return scores;
       } else {
         throw 'Failed to fetch leaderboard data';
@@ -45,7 +46,7 @@ class LeaderboardProvider extends ChangeNotifier {
 
       if (response.statusCode == 200) {
         // Score saved successfully
-        debugPrint('score successfully added');
+        print('score successfully added');
         // You can add further handling here if needed
       } else if (response.statusCode == 400) {
         // Invalid user

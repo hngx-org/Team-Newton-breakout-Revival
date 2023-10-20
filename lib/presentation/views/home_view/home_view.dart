@@ -91,7 +91,7 @@ class _HomeViewState extends State<HomeView> {
                     ),
                   ),
                   Text(
-                    'Highest Score: ${provider.highScore ?? '0'}',
+                    'Highest Score: ${provider.highScore}',
                     style: const TextStyle(
                       color: Colors.white,
                       fontFamily: 'Minecraft',
@@ -202,14 +202,14 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                       InkWell(
-                        onTap: () async {
+                        onTap: () {
                           provider.stopGlobalMusic();
-                          await Navigator.push(
+                          Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
                                     const BrickBreakerGameScreen(),
-                              )).then((value) => {setState(() {})});
+                              ));
                         },
                         child: Image.asset(
                           "assets/images/play-blue-2.png",

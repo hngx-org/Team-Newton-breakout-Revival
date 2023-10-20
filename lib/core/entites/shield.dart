@@ -5,6 +5,8 @@ import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
+import 'package:newton_breakout_revival/core/locator.dart';
+import 'package:newton_breakout_revival/core/powerups/shield_powerup.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 class Shield extends SpriteComponent

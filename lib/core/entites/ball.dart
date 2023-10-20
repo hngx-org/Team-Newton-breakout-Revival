@@ -41,7 +41,7 @@ class BallComponent extends SpriteComponent
   }
 
   void launch() {
-    velocity = Vector2(10, -400);
+    velocity = Vector2(10, -300);
     gameIsRunning = true;
   }
 
@@ -53,6 +53,7 @@ class BallComponent extends SpriteComponent
   Future<void> increaseBall() async {
     width = 35;
     height = 35;
+    // velocity. = velocity.
     _reloadHitBox();
     _ballPowerUp.activate(
       () {

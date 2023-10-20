@@ -62,6 +62,24 @@ class LeaderboardScreen extends StatelessWidget {
                             );
                           } else {
                             final leaderboardData = snapshot.data ?? [];
+                            if (leaderboardData.isEmpty) {
+                              return Center(
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.blue.withOpacity(0.7),
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Text(
+                                    ' No leaderboard Data yet!',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontFamily: 'Minecraft',
+                                        fontSize: 22,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                              );
+                            }
                             return ListView.builder(
                                 itemCount: leaderboardData.length,
                                 itemBuilder: (context, index) {

@@ -45,6 +45,7 @@ class LoginProvider extends ChangeNotifier {
         isLoggedIn = true;
         _db.save(DBKey.email, data.email!);
         _db.save(DBKey.name, data.name!);
+        _db.save(DBKey.id, data.userId!);
         Navigator.pushReplacement(
             ctx,
             MaterialPageRoute(

@@ -44,9 +44,55 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
       onWillPop: () async {
         final p = Provider.of<GlobalProvider>(context, listen: false);
         p.playGlobalMusic();
-        p.live = 3;
-        p.score = 0;
-        return true;
+
+        game.gamePaused = true;
+        game.pauseEngine();
+        p.update();
+        bool data = false;
+        await showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) {
+            return WillPopScope(
+              onWillPop: () async => false,
+              child: Dialog(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("Game paused"),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        game.gamePaused = false;
+
+                        game.resumeEngine();
+                        Navigator.of(context).pop(false);
+                      },
+                      child: const Text('Continue'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        data = true;
+                        game.gamePaused = false;
+                        p.live = 3;
+                        p.score = 0;
+                        game.resumeEngine();
+                        Navigator.of(context).pop(true);
+                      },
+                      child: const Text('Exit'),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+        if (data) {
+          Navigator.pop(context);
+        }
+        return false;
       },
       child: Scaffold(
         body: Consumer<GlobalProvider>(builder: (context, provider, _) {
@@ -187,8 +233,56 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                             ),
                             const Gap(5),
                             InkWell(
-                                onTap: () {
-                                  game.pauseGame();
+                                onTap: () async {
+                                  game.gamePaused = true;
+                                  game.pauseEngine();
+                                  provider.update();
+                                  bool data = false;
+                                  await showDialog(
+                                    context: context,
+                                    barrierDismissible: false,
+                                    builder: (context) {
+                                      return WillPopScope(
+                                        onWillPop: () async => false,
+                                        child: Dialog(
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              const Text("Game paused"),
+                                              const SizedBox(
+                                                height: 30,
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  game.gamePaused = false;
+
+                                                  game.resumeEngine();
+                                                  Navigator.of(context)
+                                                      .pop(false);
+                                                },
+                                                child: const Text('Continue'),
+                                              ),
+                                              TextButton(
+                                                onPressed: () {
+                                                  data = true;
+                                                  game.gamePaused = false;
+                                                  provider.live = 3;
+                                                  provider.score = 0;
+                                                  game.resumeEngine();
+                                                  Navigator.of(context)
+                                                      .pop(true);
+                                                },
+                                                child: const Text('Exit'),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                  if (data) {
+                                    Navigator.pop(context);
+                                  }
                                 },
                                 child: const Padding(
                                   padding: EdgeInsets.all(5),
@@ -219,19 +313,6 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                               );
                         },
                       ),
-                      game.gamePaused
-                          ? const Center(
-                              child: Text(
-                                'Game Paused',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 36,
-                                  fontFamily: 'Minecraft',
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            )
-                          : const SizedBox()
                     ],
                   ),
                 ),

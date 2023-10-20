@@ -30,34 +30,36 @@ class LeaderboardProvider extends ChangeNotifier {
   }
 
   Future<void> saveScore(int score) async {
-    try {
-      final response = await http.post(
-        Uri.parse("$baseUrl/game/scoreboard"),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(
-          {
-            'name': _db.get(DBKey.name),
-            'score': score,
+    if (_db.get(DBKey.id) != null) {
+      try {
+        final response = await http.post(
+          Uri.parse("$baseUrl/game/scoreboard"),
+          headers: {
+            'Content-Type': 'application/json',
           },
-        ),
-      );
+          body: jsonEncode(
+            {
+              'user_id': _db.get(DBKey.id),
+              'score': score,
+            },
+          ),
+        );
 
-      if (response.statusCode == 200) {
-        // Score saved successfully
-        print('score successfully added');
-        // You can add further handling here if needed
-      } else if (response.statusCode == 400) {
-        // Invalid user
-        final dynamic responseData = jsonDecode(response.body);
-        throw responseData['message'];
-      } else {
-        // Handle other error cases here
-        throw 'An error occurred';
+        if (response.statusCode == 200) {
+          // Score saved successfully
+          print('score successfully added');
+          // You can add further handling here if needed
+        } else if (response.statusCode == 400) {
+          // Invalid user
+          final dynamic responseData = jsonDecode(response.body);
+          throw responseData['message'];
+        } else {
+          // Handle other error cases here
+          throw 'An error occurred';
+        }
+      } catch (e) {
+        // throw e.toString();
       }
-    } catch (e) {
-      // throw e.toString();
     }
   }
 }

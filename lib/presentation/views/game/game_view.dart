@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:newton_breakout_revival/core/util/size_config.dart';
 import 'package:newton_breakout_revival/data/global_provider/global_provider.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 import 'package:newton_breakout_revival/presentation/widgets/countdown_timer.dart';
@@ -56,34 +59,59 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
             return WillPopScope(
               onWillPop: () async => false,
               child: Dialog(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Text("Game paused"),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        game.gamePaused = false;
+                backgroundColor: Colors.transparent,
+                child: Padding(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        "Game paused",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: 'Minecraft',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 25),
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          game.gamePaused = false;
 
-                        game.resumeEngine();
-                        Navigator.of(context).pop(false);
-                      },
-                      child: const Text('Continue'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        data = true;
-                        game.gamePaused = false;
-                        p.live = 3;
-                        p.score = 0;
-                        game.resumeEngine();
-                        Navigator.of(context).pop(true);
-                      },
-                      child: const Text('Exit'),
-                    ),
-                  ],
+                          game.resumeEngine();
+                          Navigator.of(context).pop(false);
+                        },
+                        child: const Text(
+                          'Continue',
+                          style: TextStyle(
+                              color: Colors.green,
+                              fontFamily: 'Minecraft',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          data = true;
+                          game.gamePaused = false;
+                          p.live = 3;
+                          p.score = 0;
+                          game.resumeEngine();
+                          Navigator.of(context).pop(true);
+                        },
+                        child: const Text(
+                          'Exit',
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontFamily: 'Minecraft',
+                              fontWeight: FontWeight.bold,
+                              fontSize: 25),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
@@ -116,182 +144,217 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                         top: BorderSide(color: Colors.white, width: 2),
                       )),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Gap(3),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  child: CountdownTimer(
-                                    remainingSeconds:
-                                        provider.largePaddle.remainingSeconds,
-                                    color: Colors.yellow,
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: SizeConfig.fromWidth(context, 20),
+                                    child: CountdownTimer(
+                                      remainingSeconds:
+                                          provider.largePaddle.remainingSeconds,
+                                      color: Colors.yellow,
+                                    ),
                                   ),
-                                ),
-                                const Gap(10),
-                                const Text(
-                                  "Large Pad.",
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Minecraft',
-                                      fontSize: 10),
-                                )
-                              ],
-                            ),
-                            const Gap(3),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  child: CountdownTimer(
-                                    remainingSeconds:
-                                        provider.bigBall.remainingSeconds,
-                                    color: Colors.blue,
+                                  const Gap(10),
+                                  const Text(
+                                    "Large Pad.",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Minecraft',
+                                        fontSize: 10),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: SizeConfig.fromWidth(context, 20),
+                                    child: CountdownTimer(
+                                      remainingSeconds:
+                                          provider.bigBall.remainingSeconds,
+                                      color: Colors.blue,
+                                    ),
                                   ),
-                                ),
-                                const Gap(10),
-                                const Text(
-                                  "Big Ball",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Minecraft',
-                                      fontSize: 10),
-                                )
-                              ],
-                            ),
-                            const Gap(3),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 100,
-                                  child: CountdownTimer(
-                                    remainingSeconds:
-                                        provider.shield.remainingSeconds,
-                                    color: Colors.red,
+                                  const Gap(10),
+                                  const Text(
+                                    "Big Ball",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Minecraft',
+                                        fontSize: 10),
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: SizeConfig.fromWidth(context, 20),
+                                    child: CountdownTimer(
+                                      remainingSeconds:
+                                          provider.shield.remainingSeconds,
+                                      color: Colors.red,
+                                    ),
                                   ),
-                                ),
-                                const Gap(10),
-                                const Text(
-                                  "Shield",
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontFamily: 'Minecraft',
-                                      fontSize: 10),
-                                )
-                              ],
-                            ),
-                          ],
+                                  const Gap(10),
+                                  const Text(
+                                    "Shield",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Minecraft',
+                                        fontSize: 10),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
-                        Row(
-                          children: [
-                            SizedBox(
-                              width: 80,
-                              child: provider.live < 0
-                                  ? Container()
-                                  : ListView.builder(
-                                      itemCount: provider.live,
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        return const Icon(
-                                          Icons.favorite_rounded,
-                                          color: Colors.red,
+                        Expanded(
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: SizeConfig.fromWidth(context, 17),
+                                child: provider.live < 0
+                                    ? Container()
+                                    : ListView.builder(
+                                        itemCount: provider.live,
+                                        scrollDirection: Axis.horizontal,
+                                        itemBuilder: (context, index) {
+                                          return Icon(
+                                            Icons.favorite_rounded,
+                                            size:
+                                                SizeConfig.fontSize(context, 5),
+                                            color: Colors.red,
+                                          );
+                                        },
+                                      ),
+                              ),
+                              Text(
+                                'Score ',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: SizeConfig.fontSize(context, 3),
+                                  fontFamily: 'Minecraft',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Gap(5),
+                              NeonBorderContainer(
+                                width: SizeConfig.fromWidth(context, 10),
+                                height: SizeConfig.fromWidth(context, 10),
+                                child: Center(
+                                  child: Text(
+                                    "${provider.score}",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: SizeConfig.fontSize(context, 4),
+                                      fontFamily: 'Minecraft',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Gap(5),
+                              InkWell(
+                                  onTap: () async {
+                                    game.gamePaused = true;
+                                    game.pauseEngine();
+                                    provider.update();
+                                    bool data = false;
+                                    await showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (context) {
+                                        return WillPopScope(
+                                          onWillPop: () async => false,
+                                          child: Dialog(
+                                            backgroundColor: Colors.transparent,
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(18.0),
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  const Text(
+                                                    "Game paused",
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: 'Minecraft',
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 25),
+                                                  ),
+                                                  const SizedBox(
+                                                    height: 30,
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      game.gamePaused = false;
+
+                                                      game.resumeEngine();
+                                                      Navigator.of(context)
+                                                          .pop(false);
+                                                    },
+                                                    child: const Text(
+                                                      'Continue',
+                                                      style: TextStyle(
+                                                          color: Colors.green,
+                                                          fontFamily:
+                                                              'Minecraft',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 25),
+                                                    ),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      data = true;
+                                                      game.gamePaused = false;
+                                                      provider.live = 3;
+                                                      provider.score = 0;
+                                                      game.resumeEngine();
+                                                      Navigator.of(context)
+                                                          .pop(true);
+                                                    },
+                                                    child: const Text(
+                                                      'Exit',
+                                                      style: TextStyle(
+                                                          color: Colors.red,
+                                                          fontFamily:
+                                                              'Minecraft',
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 25),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
                                         );
                                       },
+                                    );
+                                    if (data) {
+                                      Navigator.pop(context);
+                                    }
+                                  },
+                                  child: const Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Icon(
+                                      Icons.pause,
+                                      color: Colors.white,
                                     ),
-                            ),
-                            const Text(
-                              'Score ',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontFamily: 'Minecraft',
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Gap(10),
-                            NeonBorderContainer(
-                              width: 45,
-                              height: 45,
-                              child: Center(
-                                child: Text(
-                                  "${provider.score}",
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 24,
-                                    fontFamily: 'Minecraft',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const Gap(5),
-                            InkWell(
-                                onTap: () async {
-                                  game.gamePaused = true;
-                                  game.pauseEngine();
-                                  provider.update();
-                                  bool data = false;
-                                  await showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    builder: (context) {
-                                      return WillPopScope(
-                                        onWillPop: () async => false,
-                                        child: Dialog(
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              const Text("Game paused"),
-                                              const SizedBox(
-                                                height: 30,
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  game.gamePaused = false;
-
-                                                  game.resumeEngine();
-                                                  Navigator.of(context)
-                                                      .pop(false);
-                                                },
-                                                child: const Text('Continue'),
-                                              ),
-                                              TextButton(
-                                                onPressed: () {
-                                                  data = true;
-                                                  game.gamePaused = false;
-                                                  provider.live = 3;
-                                                  provider.score = 0;
-                                                  game.resumeEngine();
-                                                  Navigator.of(context)
-                                                      .pop(true);
-                                                },
-                                                child: const Text('Exit'),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                  if (data) {
-                                    Navigator.pop(context);
-                                  }
-                                },
-                                child: const Padding(
-                                  padding: EdgeInsets.all(5),
-                                  child: Icon(
-                                    Icons.pause,
-                                    color: Colors.white,
-                                  ),
-                                ))
-                          ],
+                                  ))
+                            ],
+                          ),
                         ),
                       ],
                     ),

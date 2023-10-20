@@ -46,7 +46,6 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
         p.playGlobalMusic();
         p.live = 3;
         p.score = 0;
-        p.update();
         return true;
       },
       child: Scaffold(

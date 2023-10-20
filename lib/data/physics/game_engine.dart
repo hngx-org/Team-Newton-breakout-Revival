@@ -92,6 +92,13 @@ class GameEngine extends FlameGame
     super.onPanUpdate(info);
   }
 
+  // @override
+  // void onChildrenChanged(Component child, ChildrenChangeType type) {
+  //   if (type == ChildrenChangeType.removed) {
+  //     print('$child  is removed');
+  //   }
+  // }
+
   @override
   void onDoubleTap() {
     if (gameOver == true) {
@@ -209,7 +216,6 @@ class GameEngine extends FlameGame
     if (provider.isSongPlaying) {
       provider.playGlobalMusic();
     }
-    provider.update();
   }
 
   void pauseGame() {

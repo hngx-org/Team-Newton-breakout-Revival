@@ -64,6 +64,7 @@ class LoginProvider extends ChangeNotifier {
         log(data.message.toString());
       }
     } catch (e) {
+      print(e.toString());
       ScaffoldMessenger.of(ctx).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 2),

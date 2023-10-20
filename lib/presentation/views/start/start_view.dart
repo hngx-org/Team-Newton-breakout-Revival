@@ -29,7 +29,7 @@ class _StartViewState extends State<StartView> {
   }
 
   _leaveLoading() async {
-    if (locator<DBService>().get(DBKey.email) != null) {
+    if (locator<DBService>().get(DBKey.id) != null) {
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(

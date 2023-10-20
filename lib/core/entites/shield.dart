@@ -5,8 +5,6 @@ import 'package:flame/components.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/entites/ball.dart';
-import 'package:newton_breakout_revival/core/locator.dart';
-import 'package:newton_breakout_revival/core/powerups/shield_powerup.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 class Shield extends SpriteComponent
@@ -24,11 +22,10 @@ class Shield extends SpriteComponent
     width = gameRef.size.x;
     height = 10;
     anchor = Anchor.center;
-    add(RectangleHitbox());
+    add(RectangleHitbox(isSolid: true));
     return super.onLoad();
   }
 
- 
   @override
   void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollision(intersectionPoints, other);

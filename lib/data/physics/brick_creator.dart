@@ -14,7 +14,11 @@ class BrickCreator {
   BrickCreator(this.gameEngine);
   static const brickWidth = 40;
   static const brickHeight = 10;
-  static final powerUpTypes = PowerUpType.values.toList();
+  static final powerUpTypes = [
+    PowerUpType.BIG_BALL,
+    PowerUpType.ENLARGE_PADDLE,
+    PowerUpType.SHIELD
+  ];
   final random = Random();
   final List<BrickComponent> bricks = [];
 
@@ -30,7 +34,7 @@ class BrickCreator {
     double brickWidth = 30.0; // Width of each brick
     double brickHeight = 10.0; // Height of each brick
     double rowSpacing =
-        SizeConfig.fromHeight(context, 4); // Vertical spacing between rows
+        SizeConfig.fromHeight(context, 3); // Vertical spacing between rows
     double colSpacing = -10; // Horizontal spacing between columns
 
     List<String> lines = generatedPattern.trim().split('\n');
@@ -50,8 +54,8 @@ class BrickCreator {
           BrickComponent brick = BrickComponent(
             w: brickWidth,
             h: brickHeight,
-            powerUp: PowerUp(powerUpType),
-            pos: Vector2(x + 50, y),
+            powerUp: PowerUp(PowerUpType.EMPTY),
+            pos: Vector2(x + 30, y),
           );
 
           // Add the brick to your list of bricks or game engine
@@ -68,13 +72,15 @@ class BrickCreator {
           BrickComponent brick = BrickComponent(
             w: brickWidth,
             h: brickHeight,
-            powerUp: PowerUp(PowerUpType.BIG_BALL),
-            pos: Vector2(x + 50, y),
+            powerUp: PowerUp(powerUpType),
+            pos: Vector2(x + 30, y),
           );
 
           // Add the brick to your list of bricks or game engine
           bricks.add(brick);
           gameEngine.add(brick);
+
+          gameEngine.remainingBricks++;
         }
       }
     }

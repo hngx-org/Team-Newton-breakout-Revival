@@ -170,13 +170,13 @@ class GameEngine extends FlameGame
       case 4:
         brickC.generateBricksFromPattern(context, pattern4);
       case 5:
-        brickC.generateBricksFromPattern(context, pattern4);
+        brickC.generateBricksFromPattern(context, patter5);
       case 6:
-        brickC.generateBricksFromPattern(context, pattern4);
+        brickC.generateBricksFromPattern(context, patter6);
       case 7:
-        brickC.generateBricksFromPattern(context, pattern4);
+        brickC.generateBricksFromPattern(context, patter7);
       case 8:
-        brickC.generateBricksFromPattern(context, pattern4);
+        brickC.generateBricksFromPattern(context, patter8);
       default:
         brickC.generateBricksFromPattern(context, null);
     }
@@ -272,5 +272,18 @@ class GameEngine extends FlameGame
     setupText(
         "Level $levelStatus achieved \n\nDouble Tap to\n move to Level ${levelStatus + 1}");
     levelStatus += 1;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (ball.position.x > 0 && ball.position.x < size.x) {
+    } else {
+      ball.position = Vector2(size.x / 2, size.y - 40);
+    }
+    if (ball.position.y > 0 && ball.position.y < size.y) {
+    } else {
+      ball.position = Vector2(size.x / 2, size.y - 40);
+    }
   }
 }

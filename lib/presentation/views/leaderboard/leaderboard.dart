@@ -67,7 +67,7 @@ class LeaderboardScreen extends StatelessWidget {
                                 child: Container(
                                   padding: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                      color: Colors.blue.withOpacity(0.7),
+                                      color: Colors.blue.withValues(alpha: 0.7),
                                       borderRadius: BorderRadius.circular(10)),
                                   child: const Text(
                                     ' No leaderboard Data yet!',

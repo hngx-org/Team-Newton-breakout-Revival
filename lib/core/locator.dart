@@ -8,7 +8,7 @@ import 'package:newton_breakout_revival/data/services/db_service.dart';
 
 final locator = GetIt.instance;
 
-void setupLocator() {
+Future<void> setupLocator() async {
   locator.registerSingleton<DBService>(DBService());
   locator.registerSingleton<Domain>(Domain());
   locator.registerSingleton<ApiImplementation>(ApiImplementation());
@@ -16,6 +16,5 @@ void setupLocator() {
   locator.registerSingleton<ShieldPowerUp>(ShieldPowerUp());
   locator.registerSingleton<LargePaddle>(LargePaddle());
 
-  locator<DBService>().setup();
-
+  await locator<DBService>().setup();
 }

@@ -19,45 +19,51 @@ class BrickBreakerGameScreen extends StatefulWidget {
 }
 
 class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
-  late GameEngine game;
+  GameEngine? game;
   bool gameStarted = false;
   @override
   void initState() {
     super.initState();
-
-    game = GameEngine(
-      context,
-      gameStarted: gameStarted,
-    );
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.black, // Set the color you want
     ));
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    game ??= GameEngine(
+      context,
+      gameStarted: gameStarted,
+    );
+  }
+
+  @override
   void dispose() {
-    game.dispose();
-    game.detach();
+    game?.dispose();
+    game?.detach();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
         final p = Provider.of<GlobalProvider>(context, listen: false);
         p.playGlobalMusic();
 
-        game.gamePaused = true;
-        game.pauseEngine();
+        game!.gamePaused = true;
+        game!.pauseEngine();
         p.update();
         bool data = false;
         await showDialog(
           context: context,
           barrierDismissible: false,
           builder: (context) {
-            return WillPopScope(
-              onWillPop: () async => false,
+            return PopScope(
+              canPop: false,
               child: Dialog(
                 backgroundColor: Colors.transparent,
                 child: Padding(
@@ -78,9 +84,9 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          game.gamePaused = false;
+                          game?.gamePaused = false;
 
-                          game.resumeEngine();
+                          game?.resumeEngine();
                           Navigator.of(context).pop(false);
                         },
                         child: const Text(
@@ -95,10 +101,10 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                       TextButton(
                         onPressed: () {
                           data = true;
-                          game.gamePaused = false;
+                          game?.gamePaused = false;
                           p.live = 3;
                           p.score = 0;
-                          game.resumeEngine();
+                          game?.resumeEngine();
                           Navigator.of(context).pop(true);
                         },
                         child: const Text(
@@ -120,7 +126,6 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
         if (data) {
           Navigator.pop(context);
         }
-        return false;
       },
       child: Scaffold(
         body: Consumer<GlobalProvider>(builder: (context, provider, _) {
@@ -265,16 +270,16 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                               const Gap(5),
                               InkWell(
                                   onTap: () async {
-                                    game.gamePaused = true;
-                                    game.pauseEngine();
+                                    game?.gamePaused = true;
+                                    game?.pauseEngine();
                                     provider.update();
                                     bool data = false;
                                     await showDialog(
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (context) {
-                                        return WillPopScope(
-                                          onWillPop: () async => false,
+                                        return PopScope(
+                                          canPop: false,
                                           child: Dialog(
                                             backgroundColor: Colors.transparent,
                                             child: Padding(
@@ -297,9 +302,9 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      game.gamePaused = false;
+                                                      game?.gamePaused = false;
 
-                                                      game.resumeEngine();
+                                                      game?.resumeEngine();
                                                       Navigator.of(context)
                                                           .pop(false);
                                                     },
@@ -317,10 +322,10 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                                                   TextButton(
                                                     onPressed: () {
                                                       data = true;
-                                                      game.gamePaused = false;
+                                                      game?.gamePaused = false;
                                                       provider.live = 3;
                                                       provider.score = 0;
-                                                      game.resumeEngine();
+                                                      game?.resumeEngine();
                                                       Navigator.of(context)
                                                           .pop(true);
                                                     },
@@ -363,19 +368,20 @@ class _BrickBreakerGameScreenState extends State<BrickBreakerGameScreen> {
                 Expanded(
                   child: Stack(
                     children: [
-                      GameWidget(
-                        game: game,
-                        backgroundBuilder: (context) {
-                          return const Center(
-                              // child: Opacity(
-                              //   opacity: 0.3,
-                              //   child: FlutterLogo(
-                              //     size: 350,
-                              //   ),
-                              // ),
-                              );
-                        },
-                      ),
+                      if (game != null)
+                        GameWidget(
+                          game: game!,
+                          backgroundBuilder: (context) {
+                            return const Center(
+                                // child: Opacity(
+                                //   opacity: 0.3,
+                                //   child: FlutterLogo(
+                                //     size: 350,
+                                //   ),
+                                // ),
+                                );
+                          },
+                        ),
                     ],
                   ),
                 ),

@@ -11,7 +11,7 @@ import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 import 'paddle.dart';
 
 class BallComponent extends SpriteComponent
-    with HasGameRef<GameEngine>, CollisionCallbacks {
+    with HasGameReference<GameEngine>, CollisionCallbacks {
   final PaddleComponent player;
   final VoidCallback onGameOver;
 
@@ -30,9 +30,8 @@ class BallComponent extends SpriteComponent
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    sprite = await gameRef.loadSprite('default-ball.png');
-
-    position = Vector2(gameRef.size.x / 2, gameRef.size.y - 40);
+    sprite = await game.loadSprite('default-ball.png');
+    position = Vector2(game.size.x / 2, game.size.y - 40);
     width = 15;
     height = 15;
     anchor = Anchor.center;
@@ -45,7 +44,7 @@ class BallComponent extends SpriteComponent
     gameIsRunning = true;
   }
 
-  _reloadHitBox() {
+  void _reloadHitBox() {
     remove(hitBox);
     add(hitBox);
   }
@@ -62,7 +61,7 @@ class BallComponent extends SpriteComponent
         _reloadHitBox();
       },
       onChanged: () {
-        gameRef.provider.update();
+        game.provider.update();
       },
     );
   }
@@ -76,10 +75,10 @@ class BallComponent extends SpriteComponent
   }
 
   double _computeBallStartPositionX(NotifyingVector2 position) {
-    if (position.x > gameRef.size.x / 2) {
-      return -(position.x - (gameRef.size.x / 2));
+    if (position.x > game.size.x / 2) {
+      return -(position.x - (game.size.x / 2));
     } else {
-      return (gameRef.size.x / 2) - position.x;
+      return (game.size.x / 2) - position.x;
     }
   }
 

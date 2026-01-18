@@ -25,8 +25,10 @@ class _LoginScreenState extends State<LoginScreen> {
   GlobalKey<FormState>? formfield = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
         bool data = false;
         await showDialog(
           context: context,
@@ -54,8 +56,6 @@ class _LoginScreenState extends State<LoginScreen> {
         if (data) {
           SystemNavigator.pop();
         }
-
-        return false;
       },
       child: SafeArea(
         child: Scaffold(

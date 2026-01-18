@@ -30,16 +30,13 @@ class Loader {
 }
 
 class ProgressLoader extends StatelessWidget {
-  const ProgressLoader({this.allowBackButton = false, Key? key})
-      : super(key: key);
+  const ProgressLoader({super.key, this.allowBackButton = false});
   final bool allowBackButton;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return Future.value(allowBackButton);
-      },
+    return PopScope(
+      canPop: allowBackButton,
       child: const Scaffold(
         backgroundColor: Colors.black26,
         body: Center(

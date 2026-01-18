@@ -28,7 +28,7 @@ class _StartViewState extends State<StartView> {
     super.initState();
   }
 
-  _leaveLoading() async {
+  Future<void> _leaveLoading() async {
     if (locator<DBService>().get(DBKey.id) != null) {
       Navigator.pushReplacement(
           context,

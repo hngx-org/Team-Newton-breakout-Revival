@@ -26,20 +26,14 @@ import 'package:provider/provider.dart';
 class GameEngine extends FlameGame
     with PanDetector, DoubleTapDetector, HasCollisionDetection {
   final BuildContext context;
-  final GlobalKey key = GlobalKey();
-  Size viewport = const Size(0, 0);
+  final GlobalKey gameKey = GlobalKey();
   bool gameStarted = false;
   bool gamePaused = false;
   bool gameOver = false;
   bool levelUp = false;
   int levelStatus = 1;
   int remainingBricks = 0;
-  GameEngine(this.context, {required this.gameStarted}) {
-    // Add a lifecycle listener to get the viewport width when the game is resized.
-    viewport =
-        MediaQueryData.fromView(WidgetsBinding.instance.renderView.flutterView)
-            .size;
-  }
+  GameEngine(this.context, {required this.gameStarted});
   late PaddleComponent paddle;
   late BallComponent ball;
   late BrickCreator brickC;

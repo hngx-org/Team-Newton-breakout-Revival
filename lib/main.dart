@@ -7,9 +7,9 @@ import 'package:newton_breakout_revival/presentation/views/auth/sign_up_provider
 import 'package:newton_breakout_revival/splashscreen.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  setupLocator();
+  await setupLocator();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => GlobalProvider()),

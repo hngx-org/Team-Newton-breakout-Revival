@@ -8,7 +8,7 @@ import 'package:newton_breakout_revival/core/entites/ball.dart';
 import 'package:newton_breakout_revival/data/physics/game_engine.dart';
 
 class Shield extends SpriteComponent
-    with HasGameRef<GameEngine>, CollisionCallbacks {
+    with HasGameReference<GameEngine>, CollisionCallbacks {
   final Paint _paint = Paint()
     ..color = Colors.green.shade900
     ..style = PaintingStyle.stroke
@@ -16,10 +16,9 @@ class Shield extends SpriteComponent
 
   @override
   FutureOr<void> onLoad() async {
-    sprite = await gameRef.loadSprite('red_brick.png');
-
-    position = Vector2(gameRef.size.x / 2, gameRef.size.y - 10);
-    width = gameRef.size.x;
+    sprite = await game.loadSprite('red_brick.png');
+    position = Vector2(game.size.x / 2, game.size.y - 10);
+    width = game.size.x;
     height = 10;
     anchor = Anchor.center;
     add(RectangleHitbox(isSolid: true));
@@ -39,7 +38,7 @@ class Shield extends SpriteComponent
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawLine(Offset(0, gameRef.size.y),
-        Offset(gameRef.size.y, gameRef.size.y), _paint);
+    canvas.drawLine(
+        Offset(0, game.size.y), Offset(game.size.y, game.size.y), _paint);
   }
 }

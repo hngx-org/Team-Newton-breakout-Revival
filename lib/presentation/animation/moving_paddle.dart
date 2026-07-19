@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MovingPaddle extends StatefulWidget {
-  const MovingPaddle({Key? key}) : super(key: key);
+  const MovingPaddle({super.key});
 
   @override
   State<MovingPaddle> createState() => _MovingPaddleState();

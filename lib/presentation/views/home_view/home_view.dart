@@ -32,8 +32,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
         bool data = false;
         await showDialog(
           context: context,
@@ -61,8 +63,6 @@ class _HomeViewState extends State<HomeView> {
         if (data) {
           SystemNavigator.pop();
         }
-
-        return false;
       },
       child: Scaffold(
         backgroundColor: const Color.fromARGB(31, 23, 136, 192),

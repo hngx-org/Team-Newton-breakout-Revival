@@ -24,8 +24,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   GlobalKey<FormState>? formfield = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
         bool data = false;
         await showDialog(
           context: context,
@@ -53,8 +55,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         if (data) {
           SystemNavigator.pop();
         }
-
-        return false;
       },
       child: SafeArea(
         child: Scaffold(
@@ -338,4 +338,3 @@ class _SignUpScreenState extends State<SignUpScreen> {
 }
 
 // ignore: must_be_immutable
-

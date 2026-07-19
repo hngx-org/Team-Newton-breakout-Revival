@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 import 'package:newton_breakout_revival/core/entites/brick.dart';
 import 'package:newton_breakout_revival/core/entites/power_up.dart';
 import 'package:newton_breakout_revival/core/enums/power_up_type.dart';
@@ -29,13 +30,15 @@ class BrickCreator {
     bricks.clear();
   }
 
-  List<BrickComponent> generateBricksFromPattern(context, String? pattern) {
+  List<BrickComponent> generateBricksFromPattern(
+      BuildContext context, String? pattern) {
     String generatedPattern = pattern ?? pattern1;
     double brickWidth = 30.0; // Width of each brick
     double brickHeight = 10.0; // Height of each brick
     double rowSpacing =
         SizeConfig.fromHeight(context, 3); // Vertical spacing between rows
-    double colSpacing = -10; // Horizontal spacing between columns
+    double colSpacing =
+        -SizeConfig.fromWidth(context, 2); // Horizontal spacing between columns
 
     List<String> lines = generatedPattern.trim().split('\n');
     int numRows = lines.length;
